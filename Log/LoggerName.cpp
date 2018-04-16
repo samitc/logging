@@ -1,0 +1,18 @@
+#include "LoggerName.h"
+namespace Sys
+{
+    namespace Logging
+    {
+        LoggerName::LoggerName(const String &loggerName) :loggerName(loggerName)
+        {
+        }
+        UTF8 * Sys::Logging::LoggerName::getData(const UTF8 * pattern) const
+        {
+            return createStr(loggerName.c_str());
+        }
+        int LoggerName::getNumber() const
+        {
+            return 5;
+        }
+    }
+}
