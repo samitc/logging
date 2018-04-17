@@ -23,6 +23,7 @@ namespace Sys
             void log(Configuration *config, const UTF8 *level, const UTF8 *msg, const UTF8 *name, bool writeImmediately) const;
             void log(Configuration *config, const UTF8 *level, const std::function<UTF8*()>&, const UTF8 *name, bool writeImmediately) const;
         private:
+            void printAllToOutput() const;
             void addToOutput(const LogData*) const;
             static void worker(LoggerManager *manager);
             void log(LogData* logData) const;

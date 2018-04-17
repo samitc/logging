@@ -8,7 +8,7 @@ namespace LogTesting {
     TEST(PerformanceTest, LogLoadTest) {
         XmlLogger xml;
         xml.load("Log.config");
-        Logger log(xml, 0,ConcurrencyLevel::NONE);
+        Logger log(xml, 0,ConcurrencyLevel::ALL);
         constexpr int NUM_OF_MSG = 20000;
         const char *msg1 = "it is a test";
         const char *msg2 = "and is going to success";
@@ -34,7 +34,7 @@ namespace LogTesting {
     TEST(PerformanceTest, LogDelayTest) {
         XmlLogger xml;
         xml.load("Log.config");
-        Logger log(xml, 0);
+        Logger log(xml, 0,ConcurrencyLevel::ALL);
         constexpr int NUM_OF_MSG = 20000;
         const char *msg1 = "it is a test";
         const char *msg2 = "and is going to success";

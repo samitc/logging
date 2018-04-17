@@ -68,7 +68,7 @@ namespace Sys
             target.sin_family = AF_INET;
             target.sin_port = htons(port);
             inet_pton(AF_INET, addr, &target.sin_addr);
-            if (connect(s,target,sizeof(target))
+            if (connect(s,(sockaddr*)&target,sizeof(target)))
 #endif
             {
                 throw "Not implement";
@@ -82,7 +82,7 @@ namespace Sys
             const char *p = text;
             while (bsend != -1)
             {
-                int bsend = send(s, (byte*)p, l - sendB, 0);
+                bsend = send(s, (byte*)p, l - sendB, 0);
                 sendB += bsend;
             }
         }

@@ -1,5 +1,8 @@
 #include "LoggerManager.h"
 #include <algorithm>
+#if defined(LINUX)
+#include <climits>
+#endif
 #include "Configuration.h"
 #include "LogData.h"
 #include "Logger.h"
@@ -60,18 +63,9 @@ namespace Sys
         }
         void LoggerManager::worker(LoggerManager * manager)
         {
-            while (!manager->isExit)
+            while (!manager->isExit||!manager->pData.isEmpty())
             {
-                if (!manager->oData.isEmpty() && !manager->isOutputRun.test_and_set())
-                {
-                    while (!manager->oData.isEmpty())
-                    {
-                        LogOutput *logOutput = manager->oData.dequeue();
-                        manager->outputProcess.outputLog(*logOutput);
-                        delete logOutput;
-                    }
-                    manager->isOutputRun.clear();
-                }
+                manager->printAllToOutput();
                 LogData *data;
                 while (data = manager->ipData.dequeue())
                 {
@@ -85,6 +79,7 @@ namespace Sys
                     delete data;
                 }
             }
+            manager->printAllToOutput();
         }
         void Sys::Logging::LoggerManager::log(LogData* logData) const
         {
@@ -117,6 +112,19 @@ namespace Sys
         void Sys::Logging::LoggerManager::log(Configuration * config, const UTF8 * level, const std::function<UTF8*()>&msg, const UTF8 * name, bool writeImmediately) const
         {
             this->log(config, level, msg(), name, writeImmediately);
+        }
+        void LoggerManager::printAllToOutput() const
+        {
+            if (!oData.isEmpty() && !isOutputRun.test_and_set())
+            {
+                while (!oData.isEmpty())
+                {
+                    LogOutput *logOutput = oData.dequeue();
+                    outputProcess.outputLog(*logOutput);
+                    delete logOutput;
+                }
+                isOutputRun.clear();
+            }
         }
         int getThreadCount(ConcurrencyLevel level)
         {
