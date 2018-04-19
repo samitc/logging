@@ -151,7 +151,7 @@ namespace Sys
         {
             this->log(config, level, msg(), name, writeImmediately);
         }
-        void LoggerManager::printAllToOutput() const
+        void LoggerManager::printAllToOutput()
         {
             if (!oData.isEmpty() && !isOutputRun.test_and_set())
             {
