@@ -20,7 +20,7 @@ namespace LogTesting {
             log.log("info", msg2);
         }
         auto end = std::chrono::high_resolution_clock::now();
-#if defined(DEBUG)
+#if !defined(NDEBUG)
         constexpr double msgPerMilisec = 10;
 #else
         constexpr double msgPerMilisec = 17;
@@ -61,7 +61,7 @@ namespace LogTesting {
             b = std::chrono::high_resolution_clock::now();
             sum += b - a;
         }
-#if defined(DEBUG)
+#if !defined(NDEBUG)
         constexpr double delayInMili = 0.1;
 #else
         constexpr double delayInMili = 0.05;
