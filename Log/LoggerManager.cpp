@@ -1,20 +1,31 @@
 #include "LoggerManager.h"
 #include <algorithm>
+
 #if defined(LINUX)
 #include <climits>
+
 #endif
 #include "Configuration.h"
 #include "LogData.h"
 #include "Logger.h"
+
 namespace Sys
 {
     namespace Logging
     {
         int getThreadCount(ConcurrencyLevel level);
-        Sys::Logging::LoggerManager::LoggerManager(ConcurrencyLevel level) :LoggerManager(getThreadCount(level))
+        Sys::Logging::LoggerManager::LoggerManager(ConcurrencyLevel level) : LoggerManager(getThreadCount(level))
         {
         }
-        LoggerManager::LoggerManager(int numOfThreads) : logNumber(0), isExit(false), processLog(), outputProcess(), workerThreads(numOfThreads), pData(), ipData(), oData()
+        LoggerManager::LoggerManager(int numOfThreads)
+                : logNumber(0),
+                  isExit(false),
+                  processLog(),
+                  outputProcess(),
+                  workerThreads(numOfThreads),
+                  pData(),
+                  ipData(),
+                  oData()
         {
             isOutputRun.clear();
             for (size_t i = 0; i < workerThreads.size(); i++)
@@ -32,38 +43,58 @@ namespace Sys
             {
                 pData.enqueue(nullptr);
             }
-            for (auto & workers : workerThreads) {
+            for (auto &workers : workerThreads)
+            {
                 if (workers.joinable())
                 {
                     workers.join();
                 }
             }
+            while (!pData.isEmpty())
+            {
+                LogData *data = pData.dequeue();
+                if (data != nullptr)
+                {
+                    addToOutput(data);
+                    delete data;
+                }
+            }
+            printAllToOutput();
         }
-        void Sys::Logging::LoggerManager::log(Configuration * config, const UTF8 * level, const UTF8 * msg, const UTF8 * name, bool writeImmediately) const
+        void Sys::Logging::LoggerManager::log(Configuration *config,
+                                              const UTF8 *level,
+                                              const UTF8 *msg,
+                                              const UTF8 *name,
+                                              bool writeImmediately) const
         {
             auto datas = config->getSysData()->getNecessaryData();
             // if should write immediately or the level write immediately
-            bool isWriteImmediately = writeImmediately || !(std::find_if(config->getImmLevels().cbegin(), config->getImmLevels().cend(), [level](const String& str)
-            {
-                return !strcmp(level, str.c_str());
-            }) == config->getImmLevels().cend());
+            bool isWriteImmediately = writeImmediately ||
+                                      !(std::find_if(config->getImmLevels().cbegin(),
+                                                     config->getImmLevels().cend(),
+                                                     [level](const String &str) {
+                                                         return !strcmp(level, str.c_str());
+                                                     }) == config->getImmLevels().cend());
             log(new LogData(config, msg, String(level), String(name), isWriteImmediately, datas, logNumber++));
         }
         void LoggerManager::addToOutput(const LogData *logData) const
         {
-            UTF8* msg = processLog.processLog(*logData);
+            UTF8 *msg = processLog.processLog(*logData);
             if (msg)
             {
-                oData.enqueue(new LogOutput(logData->getConfig(), msg, logData->getWriteImmediately(), logData->getLogNumber()));
+                oData.enqueue(new LogOutput(logData->getConfig(),
+                                            msg,
+                                            logData->getWriteImmediately(),
+                                            logData->getLogNumber()));
             }
             else
             {
                 logData->getConfig()->removeRef();
             }
         }
-        void LoggerManager::worker(LoggerManager * manager)
+        void LoggerManager::worker(LoggerManager *manager)
         {
-            while (!manager->isExit||!manager->pData.isEmpty())
+            while (!manager->isExit)
             {
                 manager->printAllToOutput();
                 LogData *data;
@@ -81,14 +112,17 @@ namespace Sys
             }
             manager->printAllToOutput();
         }
-        void Sys::Logging::LoggerManager::log(LogData* logData) const
+        void Sys::Logging::LoggerManager::log(LogData *logData) const
         {
             if (!workerThreads.size())
             {
-                UTF8* msg = processLog.processLog(*logData);
+                UTF8 *msg = processLog.processLog(*logData);
                 if (msg)
                 {
-                    outputProcess.outputLog(LogOutput(logData->getConfig(), msg, logData->getWriteImmediately(), logData->getLogNumber()));
+                    outputProcess.outputLog(LogOutput(logData->getConfig(),
+                                                      msg,
+                                                      logData->getWriteImmediately(),
+                                                      logData->getLogNumber()));
                 }
                 else
                 {
@@ -109,7 +143,11 @@ namespace Sys
                 }
             }
         }
-        void Sys::Logging::LoggerManager::log(Configuration * config, const UTF8 * level, const std::function<UTF8*()>&msg, const UTF8 * name, bool writeImmediately) const
+        void Sys::Logging::LoggerManager::log(Configuration *config,
+                                              const UTF8 *level,
+                                              const std::function<UTF8 *()> &msg,
+                                              const UTF8 *name,
+                                              bool writeImmediately) const
         {
             this->log(config, level, msg(), name, writeImmediately);
         }
@@ -132,30 +170,27 @@ namespace Sys
             unsigned int count;
             switch (level)
             {
-            case Sys::Logging::ConcurrencyLevel::NONE:
-                count = 0;
-                break;
-            case Sys::Logging::ConcurrencyLevel::ONE:
-                count = 1;
-                break;
-            case Sys::Logging::ConcurrencyLevel::VERY_LOW:
-                count = hardwareThread / 8 + 1;
-                break;
-            case Sys::Logging::ConcurrencyLevel::LOW:
-                count = hardwareThread / 4 + 1;
-                break;
-            case Sys::Logging::ConcurrencyLevel::MEDIUM:
-                count = hardwareThread > 3 ? hardwareThread / 2 : 1;
-                break;
-            case Sys::Logging::ConcurrencyLevel::HIGH:
-                count = hardwareThread > 4 ? hardwareThread > 6 ? (unsigned int)(hardwareThread / 1.7) : hardwareThread - 2 : 3;
-                break;
-            case Sys::Logging::ConcurrencyLevel::VERY_HIGH:
-                count = hardwareThread > 5 ? hardwareThread > 8 ? (unsigned int)(hardwareThread / 1.4) : hardwareThread - 1 : 4;
-                break;
-            case Sys::Logging::ConcurrencyLevel::ALL:
-                count = UINT_MAX;
-                break;
+                case Sys::Logging::ConcurrencyLevel::NONE:count = 0;
+                    break;
+                case Sys::Logging::ConcurrencyLevel::ONE:count = 1;
+                    break;
+                case Sys::Logging::ConcurrencyLevel::VERY_LOW:count = hardwareThread / 8 + 1;
+                    break;
+                case Sys::Logging::ConcurrencyLevel::LOW:count = hardwareThread / 4 + 1;
+                    break;
+                case Sys::Logging::ConcurrencyLevel::MEDIUM:count = hardwareThread > 3 ? hardwareThread / 2 : 1;
+                    break;
+                case Sys::Logging::ConcurrencyLevel::HIGH:
+                    count = hardwareThread > 4 ? hardwareThread > 6 ? (unsigned int)(hardwareThread /
+                                                                                     1.7) : hardwareThread -
+                                                                                            2 : 3;
+                    break;
+                case Sys::Logging::ConcurrencyLevel::VERY_HIGH:
+                    count = hardwareThread > 5 ? hardwareThread > 8 ? (unsigned int)(hardwareThread /
+                                                                                     1.4) : hardwareThread - 1 : 4;
+                    break;
+                case Sys::Logging::ConcurrencyLevel::ALL:count = UINT_MAX;
+                    break;
             }
             return std::min(count, hardwareThread);
         }
