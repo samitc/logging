@@ -64,7 +64,7 @@ namespace LogTesting {
 #if defined(DEBUG)
         constexpr double delayInMili = 0.1;
 #else
-        constexpr double delayInMili = 0.01;
+        constexpr double delayInMili = 0.05;
 #endif
         std::string error;
         error.append("Log delay test.\nthe delay is: ");
