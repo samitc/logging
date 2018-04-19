@@ -20,7 +20,11 @@ namespace LogTesting {
             log.log("info", msg2);
         }
         auto end = std::chrono::high_resolution_clock::now();
-        constexpr double msgPerMilisec = 14.5;
+#if defined(DEBUG)
+        constexpr double msgPerMilisec = 10;
+#else
+        constexpr double msgPerMilisec = 17;
+#endif
         double diff = std::chrono::duration<double, std::milli>(end - start).count();
         std::string error;
         error.append("Log load test.\ntook: ");
@@ -57,7 +61,11 @@ namespace LogTesting {
             b = std::chrono::high_resolution_clock::now();
             sum += b - a;
         }
+#if defined(DEBUG)
         constexpr double delayInMili = 0.1;
+#else
+        constexpr double delayInMili = 0.01;
+#endif
         std::string error;
         error.append("Log delay test.\nthe delay is: ");
         error.append(std::to_string(std::chrono::duration<double, std::milli>(sum).count() / NUM_OF_MSG));
