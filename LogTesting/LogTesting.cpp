@@ -2,7 +2,6 @@
 // Created by amit on 17/09/16.
 //
 
-#include "LogTesting.h"
 #include "gtest/gtest.h"
 int main(int argc, char **argv)
 {

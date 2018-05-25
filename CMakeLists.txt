@@ -40,6 +40,7 @@ set(COMMON_SOURCE
         )
 set(TEST_SOURCE
         LogTesting/PerformanceTest.cpp
+        LogTesting/PerformanceTest.h
         LogTesting/LogTesting.cpp)
 set(CMAKE_DEBUG_POSTFIX "d")
 ADD_LIBRARY(log STATIC ${COMMON_SOURCE})
