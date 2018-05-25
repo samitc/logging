@@ -1,11 +1,34 @@
 #include "DateTime.h"
-#include <chrono>
 namespace Sys
 {
     namespace Logging
     {
+        class DateTimeWrapper
+        {
+        public:
+            DateTimeWrapper();
+            DateTimeWrapper(int year, int month, int day, int hour, int minute, int second, int millisecond);
+            int getYear() const;
+            int getMonth() const;
+            int getDay() const;
+            int getHour() const;
+            int getMinute() const;
+            int getSecond() const;
+            int getMillisecond() const;
+        private:
+            int y;
+            int m;
+            int d;
+            int h;
+            int M;
+            int s;
+            int l;
+        };
+        void formatToString(UTF8 *str, const int value, const int count);
+        int handlePattern(const UTF8 *pat, UTF8 *str, const int value, char letter);
         int countLetter(const UTF8 * str, const char l);
-        DateTime::DateTime() :time(createTimeData::getTimeNow())
+        DateTimeWrapper getTimeFromNow(const std::chrono::time_point<std::chrono::system_clock> &currentTime);
+        DateTime::DateTime() :time(std::chrono::system_clock::now())
         {
         }
         DateTime::~DateTime()
@@ -14,68 +37,67 @@ namespace Sys
         }
         UTF8 * DateTime::getData(const UTF8 * pattern) const
         {
+            DateTimeWrapper time = getTimeFromNow(this->time);
             int count;
             int l = 0;
-            std::list<UTF8 *> str;
-            UTF8* t;
+            int patternL=strlen(pattern);
+            UTF8 * temp = (UTF8*)alloca(patternL * (patternL * sizeof(UTF8) + 1));
+            int curIndex = 0;
             while (*pattern != 0)
             {
+                UTF8* curTempLocation = temp + curIndex * (patternL * sizeof(UTF8) + 1);
                 switch (*pattern)
                 {
                 case 'd':
-                    count = handlePattern(pattern + 1, str, time.getDay(), 'd');
+                    count = handlePattern(pattern + 1, curTempLocation, time.getDay(), 'd');
                     pattern += count;
                     l += count;
                     break;
                 case 'M':
-                    count = handlePattern(pattern + 1, str, time.getMonth(), 'M');
+                    count = handlePattern(pattern + 1, curTempLocation, time.getMonth(), 'M');
                     pattern += count;
                     l += count;
                     break;
                 case 'y':
-                    count = handlePattern(pattern + 1, str, time.getYear(), 'y');
+                    count = handlePattern(pattern + 1, curTempLocation, time.getYear(), 'y');
                     pattern += count;
                     l += count;
                     break;
                 case 'h':
-                    count = handlePattern(pattern + 1, str, time.getHour(), 'h');
+                    count = handlePattern(pattern + 1, curTempLocation, time.getHour(), 'h');
                     pattern += count;
                     l += count;
                     break;
                 case 'm':
-                    count = handlePattern(pattern + 1, str, time.getMinute(), 'm');
+                    count = handlePattern(pattern + 1, curTempLocation, time.getMinute(), 'm');
                     pattern += count;
                     l += count;
                     break;
                 case 's':
-                    count = handlePattern(pattern + 1, str, time.getSecond(), 's');
+                    count = handlePattern(pattern + 1, curTempLocation, time.getSecond(), 's');
                     pattern += count;
                     l += count;
                     break;
                 case 'l':
-                    count = handlePattern(pattern + 1, str, time.getMillisecond(), 'l');
+                    count = handlePattern(pattern + 1, curTempLocation, time.getMillisecond(), 'l');
                     pattern += count;
                     l += count;
                     break;
                 default:
-                    t = new UTF8[2];
-                    t[0] = *pattern;
-                    t[1] = 0;
-                    str.push_back(t);
+                    curTempLocation[0] = *pattern;
+                    curTempLocation[1] = 0;
                     pattern++;
                     l++;
                     break;
                 }
+                curIndex++;
             }
-            std::list<UTF8*>::iterator s = str.begin(), e = str.end();
             l++;
             UTF8* ret = new UTF8[l];
             ret[0] = 0;
-            while (s != e)
+            for (int i = 0;i < curIndex; i++)
             {
-                strcat(ret, *s);
-                delete[](*s);
-                ++s;
+                strcat(ret,temp + (i * (patternL * sizeof(UTF8) + 1)));
             }
             return ret;
         }
@@ -83,10 +105,10 @@ namespace Sys
         {
             return 3;
         }
-        int DateTime::handlePattern(const UTF8 *pat, std::list<UTF8 *> &str, const int value, char letter) const
+        int handlePattern(const UTF8 *pat, UTF8 *str, const int value, char letter)
         {
             int count = countLetter(pat, letter) + 1;
-            str.push_back(this->formatToString(value, count));
+            formatToString(str, value, count);
             return count;
         }
         int countLetter(const UTF8 * str, const char l)
@@ -99,7 +121,8 @@ namespace Sys
             }
             return count;
         }
-        UTF8 * DateTime::formatToString(const int value, const int count) const
+        // This method take the value to print and the number of times that the letter that represent the value apper and return a string of the value according to the count
+        void formatToString(UTF8* str, const int value, const int count)
         {
             int t = value;
             int digitCount = 0;
@@ -112,37 +135,32 @@ namespace Sys
             }
             num[digitCount] = t + '0';
             digitCount++;
-            UTF8 * ret;
             if (count < digitCount)
             {
-                ret = new UTF8[digitCount + 1];
-                ret[digitCount] = 0;
+                str[digitCount] = 0;
                 for (digitCount--, t = 0; digitCount >= 0; digitCount--, t++)
                 {
-                    ret[t] = num[digitCount];
+                    str[t] = num[digitCount];
                 }
             }
             else
             {
-                ret = new UTF8[count + 1];
-                ret[count] = 0;
+                str[count] = 0;
                 t = count - digitCount;
                 int t1 = 0;
                 while (t1 < t)
                 {
-                    ret[t1] = '0';
+                    str[t1] = '0';
                     t1++;
                 }
                 for (digitCount--; t1 < count; t1++, digitCount--)
                 {
-                    ret[t1] = num[digitCount];
+                    str[t1] = num[digitCount];
                 }
             }
-            return ret;
         }
-        DateTime::DateTimeWrapper DateTime::createTimeData::getTimeNow()
+        DateTimeWrapper getTimeFromNow(const std::chrono::time_point<std::chrono::system_clock> &currentTime)
         {
-            const auto currentTime = std::chrono::system_clock::now();
             auto timeInSeconds = std::chrono::duration_cast<std::chrono::seconds>(currentTime.time_since_epoch());
             auto timeInMilliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime.time_since_epoch());
             time_t time = std::chrono::system_clock::to_time_t(currentTime);
@@ -155,37 +173,37 @@ namespace Sys
             tm& values = *calTime;
             return DateTimeWrapper(values.tm_year + 1900, values.tm_mon + 1, values.tm_mday, values.tm_hour, values.tm_min, values.tm_sec,timeInMilliseconds.count() - timeInSeconds.count() * 1000);
         }
-        DateTime::DateTimeWrapper::DateTimeWrapper() :y(-1)
+        DateTimeWrapper::DateTimeWrapper() :y(-1)
         {
         }
-        DateTime::DateTimeWrapper::DateTimeWrapper(int year, int month, int day, int hour, int minute, int second, int millisecond) : y(year), m(month), d(day), h(hour), M(minute), s(second), l(millisecond)
+        DateTimeWrapper::DateTimeWrapper(int year, int month, int day, int hour, int minute, int second, int millisecond) : y(year), m(month), d(day), h(hour), M(minute), s(second), l(millisecond)
         {
         }
-        int DateTime::DateTimeWrapper::getYear() const
+        int DateTimeWrapper::getYear() const
         {
             return y;
         }
-        int DateTime::DateTimeWrapper::getMonth() const
+        int DateTimeWrapper::getMonth() const
         {
             return m;
         }
-        int DateTime::DateTimeWrapper::getDay() const
+        int DateTimeWrapper::getDay() const
         {
             return d;
         }
-        int DateTime::DateTimeWrapper::getHour() const
+        int DateTimeWrapper::getHour() const
         {
             return h;
         }
-        int DateTime::DateTimeWrapper::getMinute() const
+        int DateTimeWrapper::getMinute() const
         {
             return M;
         }
-        int DateTime::DateTimeWrapper::getSecond() const
+        int DateTimeWrapper::getSecond() const
         {
             return s;
         }
-        int DateTime::DateTimeWrapper::getMillisecond() const
+        int DateTimeWrapper::getMillisecond() const
         {
             return l;
         }
