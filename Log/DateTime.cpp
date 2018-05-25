@@ -52,6 +52,11 @@ namespace Sys
                     pattern += count;
                     l += count;
                     break;
+                case 'l':
+                    count = handlePattern(pattern + 1, str, time.getMillisecond(), 'l');
+                    pattern += count;
+                    l += count;
+                    break;
                 default:
                     t = new UTF8[2];
                     t[0] = *pattern;
@@ -99,7 +104,7 @@ namespace Sys
             int t = value;
             int digitCount = 0;
             char num[4];
-            while (t > 10)
+            while (t >= 10)
             {
                 num[digitCount] = (t % 10) + '0';
                 t /= 10;
@@ -138,6 +143,8 @@ namespace Sys
         DateTime::DateTimeWrapper DateTime::createTimeData::getTimeNow()
         {
             const auto currentTime = std::chrono::system_clock::now();
+            auto timeInSeconds = std::chrono::duration_cast<std::chrono::seconds>(currentTime.time_since_epoch());
+            auto timeInMilliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime.time_since_epoch());
             time_t time = std::chrono::system_clock::to_time_t(currentTime);
             auto currentTimeRounded = std::chrono::system_clock::from_time_t(time);
             if (currentTimeRounded > currentTime) {
@@ -146,12 +153,12 @@ namespace Sys
             }
             tm *calTime = localtime(&time);
             tm& values = *calTime;
-            return DateTimeWrapper(values.tm_year + 1900, values.tm_mon + 1, values.tm_mday, values.tm_hour, values.tm_min, values.tm_sec);
+            return DateTimeWrapper(values.tm_year + 1900, values.tm_mon + 1, values.tm_mday, values.tm_hour, values.tm_min, values.tm_sec,timeInMilliseconds.count() - timeInSeconds.count() * 1000);
         }
         DateTime::DateTimeWrapper::DateTimeWrapper() :y(-1)
         {
         }
-        DateTime::DateTimeWrapper::DateTimeWrapper(int year, int month, int day, int hour, int minute, int second) : y(year), m(month), d(day), h(hour), M(minute), s(second)
+        DateTime::DateTimeWrapper::DateTimeWrapper(int year, int month, int day, int hour, int minute, int second, int millisecond) : y(year), m(month), d(day), h(hour), M(minute), s(second), l(millisecond)
         {
         }
         int DateTime::DateTimeWrapper::getYear() const
@@ -177,6 +184,10 @@ namespace Sys
         int DateTime::DateTimeWrapper::getSecond() const
         {
             return s;
+        }
+        int DateTime::DateTimeWrapper::getMillisecond() const
+        {
+            return l;
         }
     }
 }

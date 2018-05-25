@@ -14,13 +14,14 @@ namespace Sys
             {
             public:
                 DateTimeWrapper();
-                DateTimeWrapper(int year, int month, int day, int hour, int minute, int second);
+                DateTimeWrapper(int year, int month, int day, int hour, int minute, int second, int millisecond);
                 int getYear() const;
                 int getMonth() const;
                 int getDay() const;
                 int getHour() const;
                 int getMinute() const;
                 int getSecond() const;
+                int getMillisecond() const;
             private:
                 int y;
                 int m;
@@ -28,6 +29,7 @@ namespace Sys
                 int h;
                 int M;
                 int s;
+                int l;
             };
         public:
             DateTime();
