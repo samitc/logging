@@ -82,7 +82,7 @@ namespace Sys
             const char *p = text;
             while (bsend != -1)
             {
-                bsend = send(s, (byte*)p, l - sendB, 0);
+                bsend = send(s, p, l - sendB, 0);
                 sendB += bsend;
             }
         }

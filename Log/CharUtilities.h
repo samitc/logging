@@ -7,7 +7,7 @@ namespace Sys
     namespace Logging
     {
         class String;
-        using byte = char;
+        using byte = unsigned char;
         using Stream = std::basic_ostream<char>;
         using UTF8 = char;
         int strlen(const UTF8*);

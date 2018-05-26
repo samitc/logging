@@ -41,7 +41,9 @@ set(COMMON_SOURCE
 set(TEST_SOURCE
         LogTesting/PerformanceTest.cpp
         LogTesting/PerformanceTest.h
-        LogTesting/LogTesting.cpp)
+        LogTesting/LogTesting.cpp
+        LogTesting/GeneralTest.h
+        LogTesting/GeneralTest.cpp)
 set(CMAKE_DEBUG_POSTFIX "d")
 ADD_LIBRARY(log STATIC ${COMMON_SOURCE})
 find_package(Threads)
@@ -56,11 +58,16 @@ if (AddGTest_FOUND)
     target_link_libraries(logTesting 
 		debug ${GTEST_DEBUG_LIBRARIES}
 		optimized ${GTEST_RELEASE_LIBRARIES})
-	add_custom_command(
-        TARGET logTesting POST_BUILD 
+    add_custom_command(
+        TARGET logTesting POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy
                 ${CMAKE_SOURCE_DIR}/LogTesting/Log.config
                 ${CMAKE_BINARY_DIR}/Log.config)
+    add_custom_command(
+        TARGET logTesting POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy
+                ${CMAKE_SOURCE_DIR}/LogTesting/TestOutput.py
+                ${CMAKE_BINARY_DIR}/TestOutput.py)
 endif (AddGTest_FOUND)
 if (MSYS OR MINGW)
     set(DISABLE_PTHREADS ON)
