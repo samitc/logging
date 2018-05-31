@@ -28,9 +28,12 @@ namespace Sys
                   oData()
         {
             isOutputRun.clear();
-            for (size_t i = 0; i < workerThreads.size(); i++)
-            {
-                workerThreads[i] = std::thread(&LoggerManager::worker, this);
+            if (numOfThreads > 0) {
+                workerThreads[0] = std::thread([&]{ printerWorker(); });
+                for (size_t i = 1; i < numOfThreads; i++)
+                {
+                    workerThreads[i] = std::thread([&]{ processWorker(); });
+                }
             }
         }
         LoggerManager::LoggerManager(LoggerManager &&)
@@ -92,24 +95,35 @@ namespace Sys
                 logData->getConfig()->removeRef();
             }
         }
-        void LoggerManager::worker(LoggerManager *manager)
+        void LoggerManager::printerWorker()
         {
             LogData *data;
             do {
-                manager->printAllToOutput();
-                while (data = manager->ipData.dequeue())
+                while (data = ipData.dequeue())
                 {
-                    manager->addToOutput(data);
+                    addToOutput(data);
                     delete data;
                 }
-                data = manager->pData.dequeueW();
+                printAllToOutput();
+                data = pData.dequeueW();
                 if (data)
                 {
-                    manager->addToOutput(data);
+                    addToOutput(data);
                     delete data;
                 }
-            } while (!manager->isExit && data != nullptr);
-            manager->printAllToOutput();
+            } while (!isExit && data != nullptr);
+            printAllToOutput();
+        }
+        void LoggerManager::processWorker()
+        {
+            LogData *data;
+            do {
+                data = pData.dequeueW();
+                if (data) {
+                    addToOutput(data);
+                    delete data;
+                }
+            } while (!isExit && data != nullptr);
         }
         void Sys::Logging::LoggerManager::log(LogData *logData) const
         {

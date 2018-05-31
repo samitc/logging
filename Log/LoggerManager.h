@@ -25,7 +25,8 @@ namespace Sys
         private:
             void printAllToOutput();
             void addToOutput(const LogData*) const;
-            static void worker(LoggerManager *manager);
+            void printerWorker();
+            void processWorker();
             void log(LogData* logData) const;
             ProcessLog processLog;
             OutputProcess outputProcess;
