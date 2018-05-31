@@ -94,10 +94,9 @@ namespace Sys
         }
         void LoggerManager::worker(LoggerManager *manager)
         {
-            while (!manager->isExit)
-            {
+            LogData *data;
+            do {
                 manager->printAllToOutput();
-                LogData *data;
                 while (data = manager->ipData.dequeue())
                 {
                     manager->addToOutput(data);
@@ -109,7 +108,7 @@ namespace Sys
                     manager->addToOutput(data);
                     delete data;
                 }
-            }
+            } while (!manager->isExit && data != nullptr);
             manager->printAllToOutput();
         }
         void Sys::Logging::LoggerManager::log(LogData *logData) const
