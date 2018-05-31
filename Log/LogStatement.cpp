@@ -6,6 +6,7 @@ namespace Sys
 {
     namespace Logging
     {
+#define MAX_LOG_SIZE    4096
         LogStatement::LogStatement(const PreMessage *preMessage, const char* msg, const String& level) :ILogStatement(preMessage), level(level)
         {
             register int l = strlen(msg) + 1;
@@ -18,17 +19,15 @@ namespace Sys
         }
         String LogStatement::getMessage(const std::list<IData*>& datas) const
         {
-            char* ret = createStr(((PreMessage*)(this->msg))->getNonPatteren());
-            std::list<IData *>::iterator s = this->datas->begin(), e = this->datas->end();
+            UTF8 finalStr[MAX_LOG_SIZE];
+            UTF8* fP = finalStr;
+            *fP = 0;
+            char* nonPat = createStr(((PreMessage*)(this->msg))->getNonPatteren());
+            char* nPat = nonPat;
+            auto s = this->datas->begin(), e = this->datas->end();
             auto ds = datas.cbegin(), de = datas.cend();
+            int curStrIndex = 0;
             int index = 0;
-            char sh[6];
-            sh[0] = '~';
-            sh[1] = '0';
-            sh[2] = '~';
-            sh[3] = 0;
-            sh[4] = 0;
-            sh[5] = 0;
             int countl = 3;
             while (s != e)
             {
@@ -43,47 +42,22 @@ namespace Sys
                     dat = *s;
                 }
                 char * t = dat->getData(((PreMessage*)(this->msg))->getPaterenAt(index));
-                char *temp = ret;
-                if (t != nullptr)
+                int nonPatIndex = ((PreMessage*)(this->msg))->getIndexInNonPatteren(index);
+                if (curStrIndex < nonPatIndex)
                 {
-                    temp = replace(ret, find(ret, sh), t, countl);
-                    delete[] ret;
-                    delete[] t;
+                    strcat(fP,nPat,nonPatIndex - curStrIndex);
+                    fP += nonPatIndex - curStrIndex;
+                    nPat += nonPatIndex - curStrIndex;
+                    curStrIndex = nonPatIndex;
                 }
-                ret = temp;
+                strcat(fP,t);
+                fP += strlen(t);
+                delete []t;
                 ++s;
                 index++;
-                if (index == 10)
-                {
-                    sh[3] = '~';
-                    sh[1] = '0';
-                    sh[2] = '1';
-                    sh[4] = 0;
-                }
-                else if (index == 100)
-                {
-                    sh[5] = 0;
-                    sh[4] = '~';
-                    sh[2] = '0';
-                    sh[3] = '1';
-                    sh[1] = '0';
-                }
-                else if (index > 10)
-                {
-                    sh[1] = index % 10 + '0';
-                    sh[2] = index / 10 + '0';
-                }
-                else if (index > 100)
-                {
-                    sh[1] = index % 100 + '0';
-                    sh[2] = (index / 10) % 10 + '0';
-                    sh[3] = index / 100 + '0';
-                }
-                else
-                {
-                    sh[1] = index % 10 + '0';
-                }
             }
+            delete [] nonPat;
+            char *ret = createStr(finalStr);
             char* temp = replace(ret, find(ret, "~!@"), message, 3);
             delete[]ret;
             ret = temp;

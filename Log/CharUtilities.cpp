@@ -61,6 +61,10 @@ namespace Sys
         {
             ::strcat(dst, src);
         }
+        void strcat(UTF8* dst, const UTF8 *src, int n)
+        {
+            ::strncat(dst, src, n);
+        }
         char * replace(const UTF8 *str, int pos, const UTF8 *strToPut, int charToDelete)
         {
             register int lP = strlen(strToPut);

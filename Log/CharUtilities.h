@@ -15,6 +15,7 @@ namespace Sys
         void strcpy(UTF8 *, const UTF8*);
         void strcpy(UTF8 *, const UTF8*, int);
         void strcat(UTF8 *, const UTF8*);
+        void strcat(UTF8 *, const UTF8*, int);
         char* replace(const UTF8*, int, const UTF8*, int);
         int find(const UTF8*, const UTF8*);
         int strcmp(const UTF8*, const UTF8*);
