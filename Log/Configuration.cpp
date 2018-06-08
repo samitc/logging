@@ -6,13 +6,13 @@ namespace Sys
         Configuration::Configuration() :sysData(nullptr), loggerWriter(nullptr), level(-1), numOfRef(1), removeWriter(true)
         {
         }
-        Configuration::Configuration(Configuration &&c) : Configuration(c.sysData, c.loggerWriter, c.level, std::move(c.levels), std::move(c.immLevels), std::move(c.filter))
+        Configuration::Configuration(Configuration &&c) : Configuration(c.sysData, c.loggerWriter, c.level, std::move(c.levels), std::move(c.immLevels), std::move(c.filter),c.maxWaitingLogs)
         {
             c.loggerWriter = nullptr;
             c.sysData = nullptr;
         }
-        Configuration::Configuration(PreMessage *p, ILoggerWriter *l, unsigned char level, std::map<String, int>&&cl, std::vector<String>&&iml, LogFilter &&f) :
-            sysData(p), loggerWriter(l), level(level), levels(std::move(cl)), immLevels(std::move(iml)), filter(std::move(f)), numOfRef(1), removeWriter(true)
+        Configuration::Configuration(PreMessage *p, ILoggerWriter *l, unsigned char level, std::map<String, int>&&cl, std::vector<String>&&iml, LogFilter &&f,int maxWaitingLogs) :
+            sysData(p), loggerWriter(l), level(level), levels(std::move(cl)), immLevels(std::move(iml)), filter(std::move(f)), numOfRef(1), removeWriter(true), maxWaitingLogs(maxWaitingLogs)
         {
         }
         Configuration::~Configuration()
@@ -42,6 +42,10 @@ namespace Sys
         const std::vector<String>& Configuration::getImmLevels() const
         {
             return immLevels;
+        }
+        int Configuration::getMaxWaitingLogs() const
+        {
+            return maxWaitingLogs;
         }
         const LogFilter & Configuration::startUsingFilter() const
         {

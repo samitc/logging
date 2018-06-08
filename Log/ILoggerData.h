@@ -50,6 +50,7 @@ namespace Sys
             virtual std::vector<CustomLevel> getCustomLevel() const = 0;
             virtual StreamParam getStreams(int loggerNumber) const = 0;
             virtual String getLoggerName(int loggerNumber) const = 0;
+            virtual int getMaxWaitingLogs(int loggerNumber) const = 0;
             virtual String getPaterens(int loggerNumber) const = 0;
             virtual size_t getMaxLogSize(int loggerNumber) const = 0;
             virtual unsigned int getMaxLogTime(int loggerNumber) const = 0;

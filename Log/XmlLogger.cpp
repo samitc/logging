@@ -96,6 +96,14 @@ namespace Sys
             }
             return maxLogSize;
         }
+        int XmlLogger::getMaxWaitingLogs(int loggerNumber) const
+        {
+            if (maxWaitingLogs[loggerNumber]<=0)
+            {
+                return 0xffffffff;
+            }
+            return maxWaitingLogs[loggerNumber];
+        }
         unsigned int XmlLogger::getMaxLogTime(int loggerNumber) const
         {
             unsigned int maxLogTime = 60 * 60 * 24;
@@ -284,6 +292,14 @@ namespace Sys
                 }
                 streams[curLogger].fileParam.fileName = createStr(node->getAllAttributes()[0].getValue());
             }
+            else if (strcmp(name, XML_MAX_WAITING_LOGS) == 0)
+            {
+                if (this->xmlIner.top() != XML_SPECIFIC_LOGGER)
+                {
+                    throw "Not implement";
+                }
+                maxWaitingLogs[curLogger] = strToInt(node->getAllAttributes()[0].getValue());
+            }
             else if (strcmp(name, XML_FILTER) == 0)
             {
                 if (this->xmlIner.top() != XML_SPECIFIC_LOGGER)
@@ -358,6 +374,7 @@ namespace Sys
             maxLogTimeInSec.resize(curLogger + 1);
             logsFilter.resize(curLogger + 1);
             immLevels.resize(curLogger + 1);
+            maxWaitingLogs.resize(curLogger + 1);
         }
         int XmlLogger::getLogNumber(const String & appender) const
         {

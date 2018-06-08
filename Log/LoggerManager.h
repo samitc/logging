@@ -31,6 +31,7 @@ namespace Sys
             OutputProcess outputProcess;
             std::atomic<bool> isExit;
             mutable std::atomic<uint64_t> logNumber;
+            mutable std::atomic<unsigned int> numberOfWaitingLogs;
             mutable Ccons::Queue<LogData> pData;
             mutable Ccons::Queue<LogData> ipData;
             mutable Ccons::Queue<LogOutput> oData;

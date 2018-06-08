@@ -10,11 +10,12 @@
 #define		XML_FILE_LOC		"LoggerFile"
 #define		XML_APPEND_TO_FILE	"AppendToFile"//true false
 #define		XML_MAX_FILES		"maxFiles"
+#define     XML_MAX_WAITING_LOGS    "maxWaitingLogs"
 #define		STRRAM_NETWORK_ADDR	"address"
 #define		STREAM_NETWORK_PORT	"port"
 #define STREAM_NETWORK_PROTOCOL	"protocol"
 
-//אפשר אולי להוסיף פה מחלקת משתמש
+
 #define		XML_MAX_LOG_SIZE	"maximumLogSize"//"10MB"
 #define		XML_MAX_LOG_TIME	"maximumLogTime"//1s;m;h;d
 #define		XML_PATTERN			"pattern"

@@ -19,6 +19,7 @@ namespace Sys
         }
         LoggerManager::LoggerManager(int numOfThreads)
                 : logNumber(0),
+                  numberOfWaitingLogs(0),
                   isExit(false),
                   processLog(),
                   outputProcess(),
@@ -132,6 +133,17 @@ namespace Sys
             }
             else
             {
+                while (numberOfWaitingLogs > logData->getConfig()->getMaxWaitingLogs())
+                {
+                    LogData *data;
+                    data = this->pData.dequeue();
+                    if (data)
+                    {
+                        addToOutput(data);
+                        delete data;
+                    }
+                }
+                ++numberOfWaitingLogs;
                 if (logData->getWriteImmediately())
                 {
                     ipData.enqueue(logData);
@@ -160,6 +172,7 @@ namespace Sys
                     LogOutput *logOutput = oData.dequeue();
                     outputProcess.outputLog(*logOutput);
                     delete logOutput;
+                    --numberOfWaitingLogs;
                 }
                 isOutputRun.clear();
             }

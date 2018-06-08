@@ -16,13 +16,14 @@ namespace Sys
         public:
             Configuration();
             Configuration(Configuration&&);
-            Configuration(PreMessage*, ILoggerWriter *, unsigned char, std::map<String, int>&&, std::vector<String> &&, LogFilter&&);
+            Configuration(PreMessage*, ILoggerWriter *, unsigned char, std::map<String, int>&&, std::vector<String> &&, LogFilter&&,int);
             ~Configuration();
             const PreMessage* getSysData() const;
             const ILoggerWriter* getLoggerWriter() const;
             unsigned char getLevel() const;
             const std::map<String, int> &getLevels() const;
             const std::vector<String> &getImmLevels() const;
+            int getMaxWaitingLogs() const;
             const LogFilter &startUsingFilter() const;
             void endUsingFilter() const;
             void setFilter(const LogFilter& filter);
@@ -39,6 +40,7 @@ namespace Sys
             mutable Ccons::MultipleReadOneWriteLock filterRWL;
             std::atomic<unsigned int> numOfRef;
             bool removeWriter;
+            int maxWaitingLogs;
         };
     }
 }

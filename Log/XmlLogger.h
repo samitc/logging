@@ -22,6 +22,7 @@ namespace Sys
             std::vector<ILoggerData::CustomLevel> getCustomLevel() const override;
             ILoggerData::StreamParam getStreams(int loggerNumber) const override;
             size_t getMaxLogSize(int loggerNumber) const override;
+            int getMaxWaitingLogs(int loggerNumber) const override;
             unsigned int getMaxLogTime(int loggerNumber) const override;
             String getLevel(int loggerNumber) const override;
             LogFilter getLogFilter(int loggerNumber) const override;
@@ -49,6 +50,7 @@ namespace Sys
             std::vector<String> pat;
             std::vector<String> levels;
             std::vector<size_t> maxLogSizeInKB;
+            std::vector<int> maxWaitingLogs;
             std::vector<unsigned int> maxLogTimeInSec;
             std::vector<LogFilter> logsFilter;
             std::vector<std::vector<String>> immLevels;

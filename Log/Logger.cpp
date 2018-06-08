@@ -242,7 +242,7 @@ namespace Sys
                 }
                 PreMessage *p = new PreMessage(logger.getPaterens(loggerNumber).c_str(), logger.getLoggerName(loggerNumber).c_str());
                 LogFilter f = logger.getLogFilter(loggerNumber);
-                conf = new Configuration(p, writer, level, std::move(levels), std::move(immLevels), std::move(f));
+                conf = new Configuration(p, writer, level, std::move(levels), std::move(immLevels), std::move(f),logger.getMaxWaitingLogs(loggerNumber));
                 conf = config.exchange(conf, std::memory_order_release);
             }
             if (conf != nullptr)
