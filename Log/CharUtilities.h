@@ -6,6 +6,12 @@ namespace Sys
 {
     namespace Logging
     {
+        struct ReplaceData
+        {
+            int pos;
+            int charToDelete;
+            char *strToPut;
+        };
         class String;
         using byte = unsigned char;
         using Stream = std::basic_ostream<char>;
@@ -17,6 +23,7 @@ namespace Sys
         void strcat(UTF8 *, const UTF8*);
         void strcat(UTF8 *, const UTF8*, int);
         char* replace(const UTF8*, int, const UTF8*, int);
+        char* replace(const UTF8*, ReplaceData*, int);
         int find(const UTF8*, const UTF8*);
         int strcmp(const UTF8*, const UTF8*);
         int strToInt(const UTF8*);

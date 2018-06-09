@@ -11,24 +11,36 @@ namespace Sys
 #define LEVEL_ID        4
         char *addSpecialStr(char *str, int msgIndex, const char *msg, int levelIndex, const char *level)
         {
+            ReplaceData datas[2];
+            ReplaceData msgData;
+            msgData.strToPut = msg;
+            msgData.pos = msgIndex;
+            msgData.charToDelete = 0;
+            int count = 2;
             char *temp;
             if (msgIndex > levelIndex)
             {
-                temp = replace(str, msgIndex, msg, 0);
-                str = temp;
                 if (levelIndex != -1)
                 {
-                    str = replace(str, levelIndex, level, 0);
-                    delete[] temp;
+                    datas[0].strToPut = level;
+                    datas[0].pos = levelIndex;
+                    datas[0].charToDelete = 0;
+                    datas[1] = msgData;
+                }
+                else
+                {
+                    datas[0] = msgData;
+                    count = 1;
                 }
             }
             else
             {
-                temp = replace(str, levelIndex, level, 0);
-                str = replace(temp, msgIndex, msg, 0);
-                delete[] temp;
+                datas[0]=msgData;
+                datas[1].strToPut = level;
+                datas[1].pos = levelIndex;
+                datas[1].charToDelete = 0;
             }
-            return str;
+            return replace(str, datas, count);
         }
         LogStatement::LogStatement(const PreMessage *preMessage, const char* msg, const String& level) :ILogStatement(preMessage), level(level)
         {
