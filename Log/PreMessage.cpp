@@ -9,6 +9,7 @@ namespace Sys
         PreMessage::PreMessage(const UTF8 * patteren, const UTF8* logName) :IPreMessage(patteren, logName)
         {
             this->specificPatterens = new UTF8*[IPreMessage::datas.size()];
+            this->spesificPatIndex = new int[IPreMessage::datas.size()];
             this->Init(patteren);
             this->logName = createStr(logName);
         }
@@ -51,10 +52,7 @@ namespace Sys
                         nonPatteren.append(buf);
                         index1 = 0;
                     }
-                    nonPatteren.append("~"); //5
-                    itca(index, indexTmp, 100);
-                    nonPatteren.append(indexTmp);
-                    nonPatteren.append("~");
+                    spesificPatIndex[index] = nonPatteren.size();
                     p += size;
                     index++;
                 }
@@ -81,6 +79,10 @@ namespace Sys
         UTF8 * PreMessage::getPaterenAt(int index) const
         {
             return this->specificPatterens[index];
+        }
+        int PreMessage::getIndexInNonPatteren(int index) const
+        {
+            return spesificPatIndex[index];
         }
         UTF8 * PreMessage::getSpecificPatterens(const UTF8 * p, int *size)
         {

@@ -50,11 +50,11 @@ namespace Sys
         }
         unsigned int String::size() const
         {
-            return sizeM;
+            return sizeM - 1;
         }
         bool String::empty() const
         {
-            return size() == 0;
+            return sizeM == 0;
         }
         bool String::operator==(const UTF8 *o) const
         {

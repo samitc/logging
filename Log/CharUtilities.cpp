@@ -61,6 +61,10 @@ namespace Sys
         {
             ::strcat(dst, src);
         }
+        void strcat(UTF8* dst, const UTF8 *src, int n)
+        {
+            ::strncat(dst, src, n);
+        }
         char * replace(const UTF8 *str, int pos, const UTF8 *strToPut, int charToDelete)
         {
             register int lP = strlen(strToPut);
@@ -83,6 +87,35 @@ namespace Sys
                 *(p++) = *(s++);
             }
             *p = NULL;
+            return ret;
+        }
+        char* replace(const UTF8* str, ReplaceData* datas, int numOfDatas)
+        {
+            int totalLen = strlen(str) + 1;
+            for (int i = 0; i < numOfDatas; i++)
+            {
+                totalLen += strlen(datas[i].strToPut) - datas[i].charToDelete;
+            }
+            char *ret = new char[totalLen];
+            char *p = ret;
+            const UTF8 *pStr = str;
+            int deletedChar = 0;
+            for (int i = 0; i < numOfDatas; i++)
+            {
+                const UTF8 *pNextStr = str + datas[i].pos;
+                while (pStr < pNextStr)
+                {
+                    *(p++) = *(pStr++);
+                }
+                UTF8 *pSTP = datas[i].strToPut;
+                while (*pSTP != NULL)
+                {
+                    *(p++) = *(pSTP++);
+                }
+                pStr += datas[i].charToDelete;
+                deletedChar += datas[i].charToDelete;
+            }
+            strcpy(p,pStr);
             return ret;
         }
         int find(const UTF8 *str, const UTF8 *strToFind)
