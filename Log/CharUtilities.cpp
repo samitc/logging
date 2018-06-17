@@ -107,7 +107,7 @@ namespace Sys
                 {
                     *(p++) = *(pStr++);
                 }
-                UTF8 *pSTP = datas[i].strToPut;
+                const UTF8 *pSTP = datas[i].strToPut;
                 while (*pSTP != NULL)
                 {
                     *(p++) = *(pSTP++);

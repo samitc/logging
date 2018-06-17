@@ -10,7 +10,7 @@ namespace Sys
         {
             int pos;
             int charToDelete;
-            char *strToPut;
+            const char *strToPut;
         };
         class String;
         using byte = unsigned char;

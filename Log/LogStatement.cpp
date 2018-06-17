@@ -17,7 +17,6 @@ namespace Sys
             msgData.pos = msgIndex;
             msgData.charToDelete = 0;
             int count = 2;
-            char *temp;
             if (msgIndex > levelIndex)
             {
                 if (levelIndex != -1)
