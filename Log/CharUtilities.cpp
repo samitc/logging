@@ -1,6 +1,5 @@
 #include "CharUtilities.h"
 #include <string.h>
-#include <codecvt>
 namespace Sys
 {
     namespace Logging

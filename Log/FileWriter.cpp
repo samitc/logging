@@ -1,16 +1,15 @@
 #include "FileWriter.h"
 #include <locale>
-#include <codecvt>
 namespace Sys
 {
     namespace Logging
     {
         FileWriter::FileWriter(const UTF8* path, bool append)
         {
-            std::ios_base::openmode mode = 0;
+            std::ios_base::openmode mode = std::ios_base::out;
             if (append)
             {
-                mode |= std::ios_base::app;
+                mode |= std::ios_base::ate;
             }
             file = new std::ofstream(path, mode);
         }

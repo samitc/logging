@@ -16,6 +16,18 @@ namespace Sys
             {
                 NONE = 0, FILE = 1, NETWORK, CONSOLE
             };
+            struct FileParam
+                    {
+                        UTF8* fileName;
+                        bool appendToFile;
+                        int maxFiles;
+                    };
+            struct NetworkParam
+                    {
+                        char *addr;
+                        unsigned short port;
+                        Protocol protocol;
+                    };
             struct StreamParam
             {
                 StreamType streamType;
@@ -25,18 +37,8 @@ namespace Sys
                 ~StreamParam();
                 union
                 {
-                    struct FileParam
-                    {
-                        UTF8* fileName;
-                        bool appendToFile;
-                        int maxFiles;
-                    } fileParam;
-                    struct NetworkParam
-                    {
-                        char *addr;
-                        unsigned short port;
-                        Protocol protocol;
-                    } networkParam;
+                    FileParam fileParam;
+                    NetworkParam networkParam;
                 };
                 ILoggerWriter* getLoggerWriter() const;
             };
