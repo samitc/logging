@@ -1,6 +1,5 @@
 #include "CharUtilities.h"
 #include "LString.h"
-#include <codecvt>
 namespace Sys
 {
     namespace Logging

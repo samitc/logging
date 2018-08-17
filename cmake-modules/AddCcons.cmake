@@ -50,7 +50,7 @@ else (NOT GIT_FOUND)
             "${CMAKE_THREAD_LIBS_INIT}")
 
     ExternalProject_Get_Property(ccons source_dir)
-    include_directories(${source_dir}/Src)
+    include_directories(PUBLIC ${source_dir}/Src)
 
     ExternalProject_Get_Property(ccons binary_dir)
 	set(CCONS_DEBUG_DIRECTORY ${binary_dir}/${DEBUG_LIB_DIR})
