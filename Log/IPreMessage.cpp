@@ -1,6 +1,6 @@
 #include "IPreMessage.h"
-#include <string>
 #include <algorithm>
+#include "LString.h"
 #include "IncludeAllPatterens.h"
 #include "CharUtilities.h"
 #include "IData.h"

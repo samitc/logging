@@ -36,7 +36,7 @@ set(COMMON_SOURCE
         Log/ThreadId.cpp
         Log/ThreadIdPattern.cpp
         Log/XmlLogger.cpp
-		Log/String.cpp
+		Log/LString.cpp
         )
 set(TEST_SOURCE
         LogTesting/PerformanceTest.cpp

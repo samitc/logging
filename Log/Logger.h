@@ -8,6 +8,7 @@
 #include "GlobalDefinitions.h"
 #include "LogFilter.h"
 #include "LoggerManager.h"
+#include "LString.h"
 namespace Sys
 {
     namespace Logging

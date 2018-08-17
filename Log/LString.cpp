@@ -1,4 +1,4 @@
-#include "String.h"
+#include "LString.h"
 namespace Sys
 {
     namespace Logging

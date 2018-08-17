@@ -2,6 +2,7 @@
 #define _LOGDATA_H_
 #include "GlobalDefinitions.h"
 #include <list>
+#include "LString.h"
 namespace Sys
 {
     namespace Logging

@@ -2,6 +2,7 @@
 #define _LOGGERNAMEPATTERN_H_
 #include "BasePattern.h"
 #include "GlobalDefinitions.h"
+#include "LString.h"
 namespace Sys
 {
     namespace Logging
