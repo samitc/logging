@@ -3,6 +3,7 @@
 #include <stack>
 #include "rapidxml-1.13/rapidxml.hpp"
 #include "Node.h"
+#include "CharUtilities.h"
 namespace Sys
 {
 	namespace Logging
