@@ -1,9 +1,8 @@
 #include "LoggerManager.h"
 #include <algorithm>
-
+#include "CharUtilities.h"
 #if defined(LINUX)
 #include <climits>
-
 #endif
 #include "Configuration.h"
 #include "LogData.h"

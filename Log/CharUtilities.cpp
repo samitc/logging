@@ -1,5 +1,5 @@
 #include "CharUtilities.h"
-#include <string>
+#include <string.h>
 #include "LString.h"
 namespace Sys
 {

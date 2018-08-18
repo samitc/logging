@@ -1,6 +1,7 @@
 #ifndef _OUTPUTPROCESS_H_
 #define _OUTPUTPROCESS_H_
 #include <set>
+#include <stdint.h>
 #include "GlobalDefinitions.h"
 namespace Sys
 {

@@ -1,7 +1,8 @@
 #ifndef _LOGDATA_H_
 #define _LOGDATA_H_
-#include "GlobalDefinitions.h"
 #include <list>
+#include <stdint.h>
+#include "GlobalDefinitions.h"
 #include "LString.h"
 namespace Sys
 {

@@ -1,4 +1,8 @@
 #include "DateTime.h"
+#include "CharUtilities.h"
+#if defined(LINUX)
+#include <alloca.h>
+#endif
 namespace Sys
 {
     namespace Logging
@@ -40,7 +44,7 @@ namespace Sys
             DateTimeWrapper time = getTimeFromNow(this->time);
             int count;
             int l = 0;
-            int patternL=strlen(pattern);
+            int patternL = strlen(pattern);
             UTF8 * temp = (UTF8*)alloca(patternL * (patternL * sizeof(UTF8) + 1));
             int curIndex = 0;
             while (*pattern != 0)
@@ -95,9 +99,9 @@ namespace Sys
             l++;
             UTF8* ret = new UTF8[l];
             ret[0] = 0;
-            for (int i = 0;i < curIndex; i++)
+            for (int i = 0; i < curIndex; i++)
             {
-                strcat(ret,temp + (i * (patternL * sizeof(UTF8) + 1)));
+                strcat(ret, temp + (i * (patternL * sizeof(UTF8) + 1)));
             }
             return ret;
         }
@@ -171,7 +175,7 @@ namespace Sys
             }
             tm *calTime = localtime(&time);
             tm& values = *calTime;
-            return DateTimeWrapper(values.tm_year + 1900, values.tm_mon + 1, values.tm_mday, values.tm_hour, values.tm_min, values.tm_sec,timeInMilliseconds.count() - timeInSeconds.count() * 1000);
+            return DateTimeWrapper(values.tm_year + 1900, values.tm_mon + 1, values.tm_mday, values.tm_hour, values.tm_min, values.tm_sec, timeInMilliseconds.count() - timeInSeconds.count() * 1000);
         }
         DateTimeWrapper::DateTimeWrapper() :y(-1)
         {

@@ -1,6 +1,7 @@
 #ifndef _THREADID_H_
 #define _THREADID_H_
 #include "IData.h"
+#include <stddef.h>
 namespace Sys
 {
     namespace Logging

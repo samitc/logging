@@ -1,6 +1,7 @@
 #ifndef _ILOGGER_H_
 #define _ILOGGER_H_
 #include <vector>
+#include <stdlib.h>
 #include "GlobalDefinitions.h"
 #include "LString.h"
 namespace Sys

@@ -1,5 +1,6 @@
 #include "FileWriter.h"
 #include <locale>
+#include "CharUtilities.h"
 namespace Sys
 {
     namespace Logging
