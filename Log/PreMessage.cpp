@@ -2,6 +2,7 @@
 #include "IData.h"
 #include <string>
 #include "GlobalDefinitions.h"
+#include "LString.h"
 namespace Sys
 {
     namespace Logging

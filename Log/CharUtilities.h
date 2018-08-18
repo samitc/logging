@@ -37,5 +37,4 @@ namespace Sys
         void itca(int, UTF8*, int);
     }
 }
-#include "String.h"
 #endif
