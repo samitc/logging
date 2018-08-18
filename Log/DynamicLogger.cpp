@@ -1,5 +1,6 @@
 #include "DynamicLogger.h"
 #include <iostream>
+#include "CharUtilities.h"
 #if defined(WINDOWS)
 #elif defined(LINUX)
 #include <sys/inotify.h>

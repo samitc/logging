@@ -1,4 +1,5 @@
 #include "ProcessData.h"
+#include "CharUtilities.h"
 #if defined(WINDOWS)
 #include <Windows.h>
 #elif defined(LINUX)

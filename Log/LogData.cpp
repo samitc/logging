@@ -1,6 +1,7 @@
 #include "LogData.h"
 #include "IData.h"
 #include "Configuration.h"
+#include "CharUtilities.h"
 namespace Sys
 {
     namespace Logging

@@ -1,4 +1,5 @@
 #include "ProcessName.h"
+#include "CharUtilities.h"
 #if defined(WINDOWS)
 #include <Windows.h>
 #include <Psapi.h>

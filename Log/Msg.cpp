@@ -1,4 +1,5 @@
 #include "Msg.h"
+#include "CharUtilities.h"
 namespace Sys
 {
     namespace Logging

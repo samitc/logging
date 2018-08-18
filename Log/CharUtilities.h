@@ -13,9 +13,6 @@ namespace Sys
             const char *strToPut;
         };
         class String;
-        using byte = unsigned char;
-        using Stream = std::basic_ostream<char>;
-        using UTF8 = char;
         int strlen(const UTF8*);
         int strlen(const String&);
         void strcpy(UTF8 *, const UTF8*);

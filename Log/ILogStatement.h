@@ -2,6 +2,7 @@
 #define _ILOGSTATEMENT_H_
 #include <list>
 #include "GlobalDefinitions.h"
+#include "LString.h"
 namespace Sys
 {
     namespace Logging

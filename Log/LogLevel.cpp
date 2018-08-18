@@ -1,4 +1,5 @@
 #include "LogLevel.h"
+#include "CharUtilities.h"
 namespace Sys
 {
     namespace Logging

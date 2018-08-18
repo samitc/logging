@@ -1,4 +1,5 @@
 #include "LString.h"
+#include "CharUtilities.h"
 namespace Sys
 {
     namespace Logging

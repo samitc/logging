@@ -1,6 +1,7 @@
 #ifndef _PROCESSNAME_H_
 #define _PROCESSNAME_H_
 #include "IData.h"
+#include <cstdio>
 namespace Sys
 {
     namespace Logging

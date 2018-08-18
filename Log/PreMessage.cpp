@@ -1,8 +1,8 @@
 #include "PreMessage.h"
 #include "IData.h"
-#include <string>
 #include "GlobalDefinitions.h"
 #include "LString.h"
+#include "CharUtilities.h"
 namespace Sys
 {
     namespace Logging

@@ -7,6 +7,7 @@
 #include "ILoggerWriter.h"
 #include "LogData.h"
 #include "Configuration.h"
+#include "CharUtilities.h"
 namespace Sys
 {
     namespace Logging

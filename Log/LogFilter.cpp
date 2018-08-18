@@ -1,5 +1,6 @@
 #include "LogFilter.h"
 #include <algorithm>
+#include "CharUtilities.h"
 namespace Sys
 {
     namespace Logging

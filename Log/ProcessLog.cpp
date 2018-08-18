@@ -4,6 +4,7 @@
 #include "Logger.h"
 #include "LogStatement.h"
 #include "Configuration.h"
+#include "CharUtilities.h"
 namespace Sys
 {
     namespace Logging

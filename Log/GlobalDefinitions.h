@@ -6,11 +6,12 @@
 	#define CONSTEXPR
 #endif
 #define CONSTEXPRN		constexpr
-#include "CharUtilities.h"
 namespace Sys
 {
 	namespace Logging
 	{
+        using byte = unsigned char;
+        using UTF8 = char;
 	}
 }
 #endif

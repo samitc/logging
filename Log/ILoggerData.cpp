@@ -2,6 +2,7 @@
 #include "FileWriter.h"
 #include "ConsoleWriter.h"
 #include "NetworkWriter.h"
+#include "CharUtilities.h"
 namespace Sys
 {
     namespace Logging
