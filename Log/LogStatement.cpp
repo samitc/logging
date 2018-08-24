@@ -9,7 +9,7 @@ namespace Sys
 #define MAX_LOG_SIZE    4096
 #define MESSAGE_ID      0
 #define LEVEL_ID        4
-        char *addSpecialStr(char *str, int msgIndex, const char *msg, int levelIndex, const char *level)
+        static char *addSpecialStr(char *str, int msgIndex, const char *msg, int levelIndex, const char *level)
         {
             ReplaceData datas[2];
             ReplaceData msgData;
@@ -68,7 +68,7 @@ namespace Sys
             while (s != e)
             {
                 IData* dat;
-                if ((*s)->getNumber() == (*ds)->getNumber())
+                if (ds != de && (*s)->getNumber() == (*ds)->getNumber())
                 {
                     dat = *ds;
                     ++ds;
