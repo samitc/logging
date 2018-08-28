@@ -104,6 +104,7 @@ namespace Sys
                 delete []t;
                 index++;
             }
+            strcat(fP, nonPat + curStrIndex);
             delete [] nonPat;
             char *ret = createStr(finalStr);
             char *temp = addSpecialStr(ret, messageIndex, message, levelIndex, level.c_str());
