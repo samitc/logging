@@ -72,7 +72,7 @@ namespace Sys
         {
             auto datas = config->getSysData()->getNecessaryData();
             // if should write immediately or the level write immediately
-            bool isWriteImmediately = writeImmediately ||
+            bool isWriteImmediately = writeImmediately || !workerThreads.size() ||
                                       !(std::find_if(config->getImmLevels().cbegin(),
                                                      config->getImmLevels().cend(),
                                                      [level](const String &str) {

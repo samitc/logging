@@ -56,7 +56,7 @@ namespace Sys
             UTF8 finalStr[MAX_LOG_SIZE];
             UTF8* fP = finalStr;
             *fP = 0;
-            char* nonPat = createStr(((PreMessage*)(this->msg))->getNonPatteren());
+            char* nonPat = ((PreMessage*)(this->msg))->getNonPatteren();
             char* nPat = nonPat;
             auto s = this->datas->begin(), e = this->datas->end();
             auto ds = datas.cbegin(), de = datas.cend();
@@ -105,13 +105,17 @@ namespace Sys
                 index++;
             }
             strcat(fP, nonPat + curStrIndex);
-            delete [] nonPat;
-            char *ret = createStr(finalStr);
-            char *temp = addSpecialStr(ret, messageIndex, message, levelIndex, level.c_str());
-            delete[]ret;
-            ret = temp;
-            String r = createString(ret);
-            delete[]ret;
+            String r;
+            if (messageIndex == -1 && levelIndex == -1)
+            {
+                r.append(finalStr);
+            }
+            else
+            {
+                char *ret = addSpecialStr(finalStr, messageIndex, message, levelIndex, level.c_str());
+                r.append(ret);
+                delete[]ret;
+            }
             r.append("\n");
             return r;
         }

@@ -44,7 +44,10 @@ set(TEST_SOURCE
         LogTesting/LogTesting.cpp
         LogTesting/GeneralTest.h
         LogTesting/GeneralTest.cpp
-        LogTesting/LogStatementTest.cpp)
+        LogTesting/LogStatementTest.cpp
+        LogTesting/LoggerTest.cpp
+        LogTesting/LoggerListener.h
+        LogTesting/LoggerListener.cpp)
 set(CMAKE_DEBUG_POSTFIX "d")
 ADD_LIBRARY(log STATIC ${COMMON_SOURCE})
 find_package(Threads)

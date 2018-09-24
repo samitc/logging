@@ -1,4 +1,5 @@
 #include "LoggerData.h"
+#include "LogFilter.h"
 namespace Sys
 {
     namespace Logging
@@ -23,7 +24,7 @@ namespace Sys
         }
         std::vector<ILoggerData::CustomLevel> LoggerData::getCustomLevel() const
         {
-            return std::vector<CustomLevel>();
+            return customLevels;
         }
         unsigned int LoggerData::getMaxLogTime(int loggerNumber) const
         {
@@ -40,6 +41,18 @@ namespace Sys
         String LoggerData::getLevel(int loggerNumber) const
         {
             return level;
+        }
+        int LoggerData::getMaxWaitingLogs(int loggerNumber) const
+        {
+            return -1;
+        }
+        LogFilter LoggerData::getLogFilter(int loggerNumber) const
+        {
+            return LogFilter();
+        }
+        std::vector<String> LoggerData::getImmediateLevels(int loggerNumber) const
+        {
+            return std::vector<String>();
         }
         void LoggerData::setLevel(const String& level)
         {
@@ -84,6 +97,13 @@ namespace Sys
         void LoggerData::setMaxLogTimeInSec(unsigned int time)
         {
             maxLogTimeInSec = time;
+        }
+        void LoggerData::addCustomLevel(const String &name, int level)
+        {
+            CustomLevel custom;
+            custom.name = name;
+            custom.level = level;
+            customLevels.push_back(std::move(custom));
         }
     }
 }

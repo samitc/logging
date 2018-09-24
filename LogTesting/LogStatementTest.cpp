@@ -24,4 +24,25 @@ namespace LogTesting
         String expextedMsg = String("message.\n");
         EXPECT_STREQ(expextedMsg.c_str(), ls.getMessage(pm.getNecessaryData()).c_str());
     }
+    TEST(LogStatementTest, testNonPatternStart)
+    {
+        PreMessage pm(".@[msg].", "logname");
+        LogStatement ls(&pm, "message", String("test_level"));
+        String expextedMsg = String(".message.\n");
+        EXPECT_STREQ(expextedMsg.c_str(), ls.getMessage(pm.getNecessaryData()).c_str());
+    }
+    TEST(LogStatementTest, testPatternOnly)
+    {
+        PreMessage pm("@[msg]", "logname");
+        LogStatement ls(&pm, "message", String("test_level"));
+        String expextedMsg = String("message\n");
+        EXPECT_STREQ(expextedMsg.c_str(), ls.getMessage(pm.getNecessaryData()).c_str());
+    }
+    TEST(LogStatementTest, testNonPatternOnly)
+    {
+        PreMessage pm("pattern", "logname");
+        LogStatement ls(&pm, "message", String("test_level"));
+        String expextedMsg = String("pattern\n");
+        EXPECT_STREQ(expextedMsg.c_str(), ls.getMessage(pm.getNecessaryData()).c_str());
+    }
 }

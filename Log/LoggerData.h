@@ -19,6 +19,9 @@ namespace Sys
             String getLoggerName(int loggerNumber) const override;
             String getPaterens(int loggerNumber) const override;
             String getLevel(int loggerNumber) const override;
+            int getMaxWaitingLogs(int loggerNumber) const override;
+            LogFilter getLogFilter(int loggerNumber) const override;
+            std::vector<String> getImmediateLevels(int loggerNumber) const override;
             void setLevel(const String& level);
             void setPatterens(const UTF8 * pat);
             void setPatterens(const String& pat);
@@ -30,6 +33,7 @@ namespace Sys
             void setStreamParam(StreamParam &&stream);
             void setMaxLogSizeInKB(size_t size);
             void setMaxLogTimeInSec(unsigned int time);
+            void addCustomLevel(const String &name,int level);
         private:
             String logName;
             String level;
@@ -37,6 +41,7 @@ namespace Sys
             String pat;
             size_t maxLogSizeInKB;
             unsigned int maxLogTimeInSec;
+            std::vector<CustomLevel> customLevels;
         };
     }
 }

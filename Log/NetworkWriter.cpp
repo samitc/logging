@@ -80,11 +80,11 @@ namespace Sys
             int bsend = 0;
             int l = strlen(text) + 1;
             const char *p = text;
-            while (bsend != -1)
+            do
             {
                 bsend = send(s, p, l - sendB, 0);
                 sendB += bsend;
-            }
+            } while (sendB < l&&bsend != 0);
         }
         NetworkWriter::~NetworkWriter()
         {

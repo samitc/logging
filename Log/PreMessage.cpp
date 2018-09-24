@@ -24,7 +24,10 @@ namespace Sys
                 }
             }
             delete[] this->specificPatterens;
-            delete[] nonPatteren;
+            if (nonPatteren != "")
+            {
+                delete[] nonPatteren;
+            }
             delete[]logName;
         }
         const UTF8 * const PreMessage::getLogName()
@@ -75,7 +78,14 @@ namespace Sys
                 buf[index1] = 0;
                 nonPatteren.append(buf);
             }
-            this->nonPatteren = createStr(nonPatteren.c_str());
+            if (nonPatteren.c_str() == nullptr)
+            {
+                this->nonPatteren = "";
+            }
+            else
+            {
+                this->nonPatteren = createStr(nonPatteren.c_str());
+            }
         }
         UTF8 * PreMessage::getPaterenAt(int index) const
         {

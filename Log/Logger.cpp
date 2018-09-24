@@ -12,6 +12,7 @@ namespace Sys
 {
     namespace Logging
     {
+#define MAX_LEVEL   255
         void Logger::log(const char * level, const UTF8 * msg, String & name, bool writeImmediately) const
         {
             String levelS(level);
@@ -235,11 +236,15 @@ namespace Sys
                 unsigned char level;
                 if (lvl == levels.cend())
                 {
-                    level = 255 - atoi(lev.c_str());
+                    level = atoi(lev.c_str());
                 }
                 else
                 {
-                    level = 255 - (*lvl).second;
+                    level = (*lvl).second;
+                }
+                if (level > MAX_LEVEL)
+                {
+                    level = MAX_LEVEL;
                 }
                 PreMessage *p = new PreMessage(logger.getPaterens(loggerNumber).c_str(), logger.getLoggerName(loggerNumber).c_str());
                 LogFilter f = logger.getLogFilter(loggerNumber);
