@@ -114,7 +114,7 @@ namespace Sys
             }
             num[digitCount] = t + '0';
             digitCount++;
-            numberDigitCount=digitCount;
+            numberDigitCount = std::max(digitCount,count);
             if (count < digitCount)
             {
                 str[digitCount] = 0;
