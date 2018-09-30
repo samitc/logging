@@ -14,10 +14,11 @@ namespace LogTesting
                 return this->time;
             }
     };
-    static tm *getLocalTime(auto time)
+    static tm *getLocalTime(std::chrono::time_point<std::chrono::system_clock> time)
     {
         auto tTime = std::chrono::system_clock::to_time_t(time);
         auto localTime = localtime(&tTime);
+        return localTime;
     }
     TEST(DateTimeTest, testOnlyYear)
     {

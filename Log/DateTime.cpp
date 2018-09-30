@@ -3,6 +3,7 @@
 #if defined(LINUX)
 #include <alloca.h>
 #endif
+#include <algorithm>
 namespace Sys
 {
     namespace Logging
