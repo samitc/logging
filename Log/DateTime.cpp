@@ -8,6 +8,7 @@ namespace Sys
 {
     namespace Logging
     {
+#define MAX_COUNT   4
         class DateTimeWrapper
         {
         public:
@@ -54,7 +55,7 @@ namespace Sys
             int digitCount;
             int l = 0;
             int patternL = strlen(pattern);
-            UTF8 * temp = (UTF8*)alloca(patternL * (patternL * sizeof(UTF8) + 1));
+            UTF8 * temp = (UTF8*)alloca(patternL * (std::max(patternL, MAX_COUNT) * sizeof(UTF8) + 1));
             int curIndex = 0;
             while (*pattern != 0)
             {
@@ -103,6 +104,10 @@ namespace Sys
         // This method take the value to print and the number of times that the letter that represent the value apper and return a string of the value according to the count
         int formatToString(UTF8* str, const int value, const int count)
         {
+            if (count > MAX_COUNT)
+            {
+                throw "Not implement";
+            }
             int t = value;
             int digitCount = 0;
             int numberDigitCount;
