@@ -77,8 +77,12 @@ matrix:
       before_install:
          - MATRIX_EVAL="CC=gcc-8 && CXX=g++-8"
       script: 
-        - cd REL64 ; valgrind --log-file=%pvalgrind.log -v -v --tool=memcheck --child-silent-after-fork=no --track-fds=yes --time-stamp=no --xml=no --num-callers=100 --error-exitcode=1 --fullpath-after=src/ --time-stamp=yes --leak-check=full --leak-resolution=high --show-leak-kinds=all --errors-for-leak-kinds=all --leak-check-heuristics=all --undef-value-errors=yes --show-mismatched-frees=yes --error-exitcode=1 ./logTesting --gtest_filter=PerformanceTest* ; cd ..
-        - cd DEB64 ; valgrind --log-file=%pvalgrind.log -v -v --tool=memcheck --child-silent-after-fork=no --track-fds=yes --time-stamp=no --xml=no --num-callers=100 --error-exitcode=1 --fullpath-after=src/ --time-stamp=yes --leak-check=full --leak-resolution=high --show-leak-kinds=all --errors-for-leak-kinds=all --leak-check-heuristics=all --undef-value-errors=yes --show-mismatched-frees=yes --error-exitcode=1 ./logTesting --gtest_filter=PerformanceTest* ; cd ..
+        - cd REL64
+        - valgrind --log-file=%pvalgrind.log -v -v --tool=memcheck --child-silent-after-fork=no --track-fds=yes --time-stamp=no --xml=no --num-callers=100 --error-exitcode=1 --fullpath-after=src/ --time-stamp=yes --leak-check=full --leak-resolution=high --show-leak-kinds=all --errors-for-leak-kinds=all --leak-check-heuristics=all --undef-value-errors=yes --show-mismatched-frees=yes --error-exitcode=1 ./logTesting --gtest_filter=PerformanceTest*
+        - cd ..
+        - cd DEB64
+        - valgrind --log-file=%pvalgrind.log -v -v --tool=memcheck --child-silent-after-fork=no --track-fds=yes --time-stamp=no --xml=no --num-callers=100 --error-exitcode=1 --fullpath-after=src/ --time-stamp=yes --leak-check=full --leak-resolution=high --show-leak-kinds=all --errors-for-leak-kinds=all --leak-check-heuristics=all --undef-value-errors=yes --show-mismatched-frees=yes --error-exitcode=1 ./logTesting --gtest_filter=PerformanceTest*
+        - cd ..
         - cat */*valgrind*
     - stage: after UT
       name: valgrind
@@ -92,8 +96,12 @@ matrix:
       before_install:
          - MATRIX_EVAL="CC=clang-6.0 && CXX=clang++-6.0"
       script: 
-        - cd REL64 ; valgrind --log-file=%pvalgrind.log -v -v --tool=memcheck --child-silent-after-fork=no --track-fds=yes --time-stamp=no --xml=no --num-callers=100 --error-exitcode=1 --fullpath-after=src/ --time-stamp=yes --leak-check=full --leak-resolution=high --show-leak-kinds=all --errors-for-leak-kinds=all --leak-check-heuristics=all --undef-value-errors=yes --show-mismatched-frees=yes --error-exitcode=1 ./logTesting --gtest_filter=PerformanceTest* ; cd ..
-        - cd DEB64 ; valgrind --log-file=%pvalgrind.log -v -v --tool=memcheck --child-silent-after-fork=no --track-fds=yes --time-stamp=no --xml=no --num-callers=100 --error-exitcode=1 --fullpath-after=src/ --time-stamp=yes --leak-check=full --leak-resolution=high --show-leak-kinds=all --errors-for-leak-kinds=all --leak-check-heuristics=all --undef-value-errors=yes --show-mismatched-frees=yes --error-exitcode=1 ./logTesting --gtest_filter=PerformanceTest* ; cd ..
+        - cd REL64
+        - valgrind --log-file=%pvalgrind.log -v -v --tool=memcheck --child-silent-after-fork=no --track-fds=yes --time-stamp=no --xml=no --num-callers=100 --error-exitcode=1 --fullpath-after=src/ --time-stamp=yes --leak-check=full --leak-resolution=high --show-leak-kinds=all --errors-for-leak-kinds=all --leak-check-heuristics=all --undef-value-errors=yes --show-mismatched-frees=yes --error-exitcode=1 ./logTesting --gtest_filter=PerformanceTest*
+        - cd ..
+        - cd DEB64
+        - valgrind --log-file=%pvalgrind.log -v -v --tool=memcheck --child-silent-after-fork=no --track-fds=yes --time-stamp=no --xml=no --num-callers=100 --error-exitcode=1 --fullpath-after=src/ --time-stamp=yes --leak-check=full --leak-resolution=high --show-leak-kinds=all --errors-for-leak-kinds=all --leak-check-heuristics=all --undef-value-errors=yes --show-mismatched-frees=yes --error-exitcode=1 ./logTesting --gtest_filter=PerformanceTest*
+        - cd ..
         - cat */*valgrind*
     - stage: after UT
       name: cppcheck
