@@ -29,7 +29,7 @@ else (NOT GIT_FOUND)
     set(AddCcons_FOUND true CACHE BOOL "Was ccons setup correctly?")
 
     ExternalProject_Add(ccons
-            GIT_REPOSITORY https://github.com/samitc/ccons.git
+            URL https://github.com/samitc/ccons/archive/d45ad60dbebc93596543d06a93ab997a21c6d553.zip
             TIMEOUT 10
             PREFIX "${CCONS_PREFIX}"
             CMAKE_ARGS "${CCONS_CMAKE_ARGS}"

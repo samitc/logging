@@ -40,7 +40,7 @@ else (NOT GIT_FOUND)
     set(AddGTest_FOUND true CACHE BOOL "Was gtest setup correctly?")
 
     ExternalProject_Add(gtest
-            GIT_REPOSITORY https://github.com/google/googletest.git
+            URL https://github.com/google/googletest/archive/v1.8.x.zip
             TIMEOUT 10
             PREFIX "${GTEST_PREFIX}"
             CMAKE_ARGS "${GTEST_CMAKE_ARGS}"

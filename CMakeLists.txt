@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.1)
 project(log)
 set(COMMON_SOURCE
         Log/BasePattern.cpp
@@ -63,16 +63,8 @@ if (AddGTest_FOUND)
     target_link_libraries(logTesting 
 		debug ${GTEST_DEBUG_LIBRARIES}
 		optimized ${GTEST_RELEASE_LIBRARIES})
-    add_custom_command(
-        TARGET logTesting POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy
-                ${CMAKE_SOURCE_DIR}/LogTesting/Log.config
-                ${CMAKE_BINARY_DIR}/Log.config)
-    add_custom_command(
-        TARGET logTesting POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy
-                ${CMAKE_SOURCE_DIR}/LogTesting/TestOutput.py
-                ${CMAKE_BINARY_DIR}/TestOutput.py)
+	add_custom_command(TARGET logTesting PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/LogTesting/Log.config $<TARGET_FILE_DIR:logTesting>)
+	add_custom_command(TARGET logTesting PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/LogTesting/TestOutput.py $<TARGET_FILE_DIR:logTesting>)
 endif (AddGTest_FOUND)
 if (MSYS OR MINGW)
     set(DISABLE_PTHREADS ON)
