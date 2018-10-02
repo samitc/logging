@@ -94,6 +94,7 @@ namespace Sys
 #elif defined(LINUX)
             close(s);
 #endif
+            delete[]addr;
         }
     }
 }

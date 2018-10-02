@@ -13,9 +13,16 @@ namespace LogTesting
         PreMessage pm("@[lname](@[llevel]).process data : @[tId].message is : @[msg]", "logname");
         LogStatement ls(&pm, "message", String("test_level"));
         String expectedMsg = String("logname(test_level).process data : ");
-        expectedMsg.append(t.getData(nullptr));
+        auto tData = t.getData(nullptr);
+        expectedMsg.append(tData);
         expectedMsg.append(".message is : message\n");
-        EXPECT_STREQ(expectedMsg.c_str(), ls.getMessage(pm.getNecessaryData()).c_str());
+        auto necessaryData = pm.getNecessaryData();
+        EXPECT_STREQ(expectedMsg.c_str(), ls.getMessage(necessaryData).c_str());
+        delete []tData;
+        for (auto n : necessaryData)
+        {
+            delete n;
+        }
     }
     TEST(LogStatementTest, testPatternTrim)
     {

@@ -24,6 +24,7 @@ namespace Sys
                 }
             }
             delete[] this->specificPatterens;
+            delete[] this->spesificPatIndex;
             if (nonPatteren != "")
             {
                 delete[] nonPatteren;
