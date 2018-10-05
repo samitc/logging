@@ -3,10 +3,12 @@
 #if defined(LINUX)
 #include <alloca.h>
 #endif
+#include <algorithm>
 namespace Sys
 {
     namespace Logging
     {
+#define MAX_COUNT   4
         class DateTimeWrapper
         {
         public:
@@ -28,8 +30,7 @@ namespace Sys
             int s;
             int l;
         };
-        void formatToString(UTF8 *str, const int value, const int count);
-        int handlePattern(const UTF8 *pat, UTF8 *str, const int value, char letter);
+        int formatToString(UTF8 *str, const int value, const int count);
         int countLetter(const UTF8 * str, const char l);
         DateTimeWrapper getTimeFromNow(const std::chrono::time_point<std::chrono::system_clock> &currentTime);
         DateTime::DateTime() :time(std::chrono::system_clock::now())
@@ -39,54 +40,35 @@ namespace Sys
         {
 
         }
+#define CREATE_PATTERN_CASE(letter,func)\
+        case letter:\
+        patternCount = countLetter(pattern + 1, letter) + 1;\
+        digitCount = formatToString(curTempLocation, (func), patternCount);\
+        pattern += patternCount;\
+        l += digitCount;\
+        break;
+
         UTF8 * DateTime::getData(const UTF8 * pattern) const
         {
             DateTimeWrapper time = getTimeFromNow(this->time);
-            int count;
+            int patternCount;
+            int digitCount;
             int l = 0;
             int patternL = strlen(pattern);
-            UTF8 * temp = (UTF8*)alloca(patternL * (patternL * sizeof(UTF8) + 1));
+            UTF8 * temp = (UTF8*)alloca(patternL * (std::max(patternL, MAX_COUNT) * sizeof(UTF8) + 1));
             int curIndex = 0;
             while (*pattern != 0)
             {
                 UTF8* curTempLocation = temp + curIndex * (patternL * sizeof(UTF8) + 1);
                 switch (*pattern)
                 {
-                case 'd':
-                    count = handlePattern(pattern + 1, curTempLocation, time.getDay(), 'd');
-                    pattern += count;
-                    l += count;
-                    break;
-                case 'M':
-                    count = handlePattern(pattern + 1, curTempLocation, time.getMonth(), 'M');
-                    pattern += count;
-                    l += count;
-                    break;
-                case 'y':
-                    count = handlePattern(pattern + 1, curTempLocation, time.getYear(), 'y');
-                    pattern += count;
-                    l += count;
-                    break;
-                case 'h':
-                    count = handlePattern(pattern + 1, curTempLocation, time.getHour(), 'h');
-                    pattern += count;
-                    l += count;
-                    break;
-                case 'm':
-                    count = handlePattern(pattern + 1, curTempLocation, time.getMinute(), 'm');
-                    pattern += count;
-                    l += count;
-                    break;
-                case 's':
-                    count = handlePattern(pattern + 1, curTempLocation, time.getSecond(), 's');
-                    pattern += count;
-                    l += count;
-                    break;
-                case 'l':
-                    count = handlePattern(pattern + 1, curTempLocation, time.getMillisecond(), 'l');
-                    pattern += count;
-                    l += count;
-                    break;
+                    CREATE_PATTERN_CASE('d',time.getDay());
+                    CREATE_PATTERN_CASE('M',time.getMonth());
+                    CREATE_PATTERN_CASE('y',time.getYear());
+                    CREATE_PATTERN_CASE('h',time.getHour());
+                    CREATE_PATTERN_CASE('m',time.getMinute());
+                    CREATE_PATTERN_CASE('s',time.getSecond());
+                    CREATE_PATTERN_CASE('l',time.getMillisecond());
                 default:
                     curTempLocation[0] = *pattern;
                     curTempLocation[1] = 0;
@@ -109,12 +91,6 @@ namespace Sys
         {
             return 3;
         }
-        int handlePattern(const UTF8 *pat, UTF8 *str, const int value, char letter)
-        {
-            int count = countLetter(pat, letter) + 1;
-            formatToString(str, value, count);
-            return count;
-        }
         int countLetter(const UTF8 * str, const char l)
         {
             int count = 0;
@@ -126,10 +102,15 @@ namespace Sys
             return count;
         }
         // This method take the value to print and the number of times that the letter that represent the value apper and return a string of the value according to the count
-        void formatToString(UTF8* str, const int value, const int count)
+        int formatToString(UTF8* str, const int value, const int count)
         {
+            if (count > MAX_COUNT)
+            {
+                throw "Not implement";
+            }
             int t = value;
             int digitCount = 0;
+            int numberDigitCount;
             char num[4];
             while (t >= 10)
             {
@@ -139,6 +120,7 @@ namespace Sys
             }
             num[digitCount] = t + '0';
             digitCount++;
+            numberDigitCount = std::max(digitCount,count);
             if (count < digitCount)
             {
                 str[digitCount] = 0;
@@ -162,6 +144,7 @@ namespace Sys
                     str[t1] = num[digitCount];
                 }
             }
+            return numberDigitCount;
         }
         DateTimeWrapper getTimeFromNow(const std::chrono::time_point<std::chrono::system_clock> &currentTime)
         {
