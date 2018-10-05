@@ -83,7 +83,7 @@ matrix:
         - cd DEB64
         - valgrind --log-file=%pvalgrind.log -v -v --tool=memcheck --child-silent-after-fork=no --track-fds=yes --time-stamp=no --xml=no --num-callers=100 --error-exitcode=1 --fullpath-after=src/ --time-stamp=yes --leak-check=full --leak-resolution=high --show-leak-kinds=all --errors-for-leak-kinds=all --leak-check-heuristics=all --undef-value-errors=yes --show-mismatched-frees=yes --error-exitcode=2 ./logTesting ; (($? != 2)) && true
         - cd ..
-        - find . -name *valgrind* -print -exec cat {} \;
+        - find . -name '*valgrind*' -print -exec cat {} \;
     - stage: after UT
       name: valgrind
       addons:
@@ -102,7 +102,7 @@ matrix:
         - cd DEB64
         - valgrind --log-file=%pvalgrind.log -v -v --tool=memcheck --child-silent-after-fork=no --track-fds=yes --time-stamp=no --xml=no --num-callers=100 --error-exitcode=1 --fullpath-after=src/ --time-stamp=yes --leak-check=full --leak-resolution=high --show-leak-kinds=all --errors-for-leak-kinds=all --leak-check-heuristics=all --undef-value-errors=yes --show-mismatched-frees=yes --error-exitcode=2 ./logTesting ; (($? != 2)) && true
         - cd ..
-        - find . -name *valgrind* -print -exec cat {} \;
+        - find . -name '*valgrind*' -print -exec cat {} \;
     - stage: after UT
       name: cppcheck
       addons:
@@ -150,4 +150,4 @@ script:
   - cd DEB64
   - ./logTesting --gtest_output="xml:testresults.xml"
   - cd ..
-  - find . -name */testresults.xml -print -exec cat {} \;
+  - find . -name '*/testresults.xml' -print -exec cat {} \;
