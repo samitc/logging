@@ -4,9 +4,16 @@ namespace Sys
 {
     namespace Logging
     {
+        MsgPattern::MsgPattern() :cacheMsg(new Msg())
+        {
+        }
+        MsgPattern::~MsgPattern()
+        {
+            delete cacheMsg;
+        }
         IData * Sys::Logging::MsgPattern::getPattern() const
         {
-            return new Msg();
+            return cacheMsg;
         }
         bool MsgPattern::toDelete()
         {

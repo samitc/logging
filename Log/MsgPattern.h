@@ -8,11 +8,12 @@ namespace Sys
         class MsgPattern :public BasePattern
         {
         public:
-            MsgPattern() = default;
-            ~MsgPattern() = default;
+            MsgPattern();
+            ~MsgPattern();
             IData* getPattern() const override;
             static bool toDelete();
         private:
+            IData* cacheMsg;
         };
     }
 }

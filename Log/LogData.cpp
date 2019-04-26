@@ -6,9 +6,15 @@ namespace Sys
 {
     namespace Logging
     {
-        LogData::LogData(Configuration* config, const UTF8* msg, const String& level, const String& name, bool writeImmediately, IndexData* datas, int datasSize, uint64_t logNumber) :
-            config(config), datas(datas), sizeOfDatas(datasSize), msg(createStr(msg)), level(level), name(name), shouldWriteInstantly(writeImmediately), logNumber(logNumber)
+        LogData::LogData(Configuration* config, const UTF8* msg, const String& level, const String& name, bool writeImmediately, uint64_t logNumber) :
+            config(config), sizeOfDatas(0), msg(createStr(msg)), level(level), name(name), shouldWriteInstantly(writeImmediately), logNumber(logNumber)
         {
+            sizeOfDatas = config->getSysData()->getNumOfNecessaryData();
+            if (sizeOfDatas>LogData::MAX_DATAS)
+            {
+                throw "Not implement";
+            }
+            config->getSysData()->getNecessaryData(datas);
         }
         LogData::LogData(const UTF8 * msg) : msg(msg), shouldWriteInstantly(false)
         {
@@ -23,7 +29,6 @@ namespace Sys
                     delete datas[i].data;
                 }
             }
-            delete[] datas;
         }
         const char * LogData::getMsg() const
         {

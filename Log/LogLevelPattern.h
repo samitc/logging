@@ -8,11 +8,12 @@ namespace Sys
         class LogLevelPattern :public BasePattern
         {
         public:
-            LogLevelPattern() = default;
-            ~LogLevelPattern() = default;
+            LogLevelPattern();
+            ~LogLevelPattern();
             IData* getPattern() const override;
             static bool toDelete();
         private:
+            IData* cacheLogLevel;
         };
     }
 }

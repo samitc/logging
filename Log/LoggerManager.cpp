@@ -70,9 +70,6 @@ namespace Sys
                                               const UTF8 *name,
                                               bool writeImmediately) const
         {
-            int sizeOfNDatas = config->getSysData()->getNumOfNecessaryData();
-            IndexData* datas = new IndexData[sizeOfNDatas];
-            config->getSysData()->getNecessaryData(datas);
             // if should write immediately or the level write immediately
             bool isWriteImmediately = writeImmediately || !workerThreads.size() ||
                                       !(std::find_if(config->getImmLevels().cbegin(),
@@ -80,7 +77,7 @@ namespace Sys
                                                      [level](const String &str) {
                                                          return !strcmp(level, str.c_str());
                                                      }) == config->getImmLevels().cend());
-            log(new LogData(config, msg, String(level), String(name), isWriteImmediately, datas, sizeOfNDatas, logNumber++));
+            log(new LogData(config, msg, String(level), String(name), isWriteImmediately, logNumber++));
         }
         void LoggerManager::addToOutput(const LogData *logData) const
         {

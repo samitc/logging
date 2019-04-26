@@ -7,14 +7,9 @@ namespace Sys
         String::String() :str(nullptr), sizeM(0)
         {
         }
-        String::String(const UTF8 * str) : String()
+        String::String(const UTF8* str) : String()
         {
-            if (str != nullptr)
-            {
-                sizeM = strlen(str) + 1;
-                this->str = new UTF8[sizeM];
-                strcpy(this->str, str);
-            }
+            append(str);
         }
         String::String(UTF8 * str, unsigned int len) :str(str), sizeM(len + 1)
         {
@@ -22,30 +17,55 @@ namespace Sys
         String::String(const String &copy) : String(copy.c_str())
         {
         }
-        String::String(String &&str) : str(str.str), sizeM(str.sizeM)
+        String::String(String&& str) : str(str.str), sizeM(str.sizeM)
         {
-            str.str = nullptr;
+            if (str.sizeM > CACHE_STR_SIZE)
+            {
+                str.str = nullptr;
+            }
+            else
+            {
+                this->str = cacheStr;
+                strcpy(this->str, str.str);
+            }
         }
         const UTF8 * String::c_str() const
         {
             return str;
         }
-        String & String::append(const UTF8 * str)
+        void String::createFromString(const UTF8* str)
         {
-            if (empty())
+            sizeM = strlen(str) + 1;
+            if (sizeM <= CACHE_STR_SIZE)
             {
-                sizeM = strlen(str) + 1;
-                this->str = new char[sizeM];
-                strcpy(this->str, str);
+                this->str = cacheStr;
             }
             else
             {
-                sizeM = strlen(str) + size() + 1;
-                UTF8 *newStr = new UTF8[sizeM];
-                strcpy(newStr, this->str);
-                strcat(newStr, str);
-                delete[]this->str;
-                this->str = newStr;
+                this->str = new UTF8[sizeM];
+            }
+            strcpy(this->str, str);
+        }
+        String& String::append(const UTF8* str)
+        {
+            if (str != nullptr)
+            {
+                if (empty())
+                {
+                    createFromString(str);
+                }
+                else
+                {
+                    sizeM = strlen(str) + size() + 1;
+                    if (sizeM > CACHE_STR_SIZE)
+                    {
+                        UTF8* newStr = new UTF8[sizeM];
+                        strcpy(newStr, this->str);
+                        deleteString();
+                        this->str = newStr;
+                    }
+                    strcat(this->str, str);
+                }
             }
             return *this;
         }
@@ -77,12 +97,12 @@ namespace Sys
         {
             if (o != nullptr)
             {
-                sizeM = strlen(o) + 1;
-                this->str = new UTF8[sizeM];
-                strcpy(this->str, o);
+                deleteString();
+                createFromString(o);
             }
             else
             {
+                deleteString();
                 str = nullptr;
                 sizeM = 0;
             }
@@ -106,9 +126,16 @@ namespace Sys
             *this += o.c_str();
             return *this;
         }
+        void String::deleteString()
+        {
+            if (str != cacheStr)
+            {
+                delete[] str;
+            }
+        }
         String::~String()
         {
-            delete[] str;
+            deleteString();
         }
     }
 }

@@ -27,6 +27,10 @@ namespace Sys
             String& operator+=(const UTF8*);
             String& operator+=(const String&);
         private:
+            void createFromString(const UTF8* str);
+            void deleteString();
+            static const int CACHE_STR_SIZE = 20;
+            UTF8 cacheStr[CACHE_STR_SIZE];
             UTF8 * str;
             unsigned int sizeM;
         };
