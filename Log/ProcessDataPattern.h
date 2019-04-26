@@ -8,10 +8,12 @@ namespace Sys
         class ProcessDataPattern :public BasePattern
         {
         public:
-            ProcessDataPattern() = default;
-            ~ProcessDataPattern() = default;
+            ProcessDataPattern();
+            ~ProcessDataPattern();
             IData* getPattern() const override;
+            static bool toDelete();
         private:
+            IData* cacheDataProcess;
         };
     }
 }

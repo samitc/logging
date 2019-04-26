@@ -11,6 +11,7 @@ namespace Sys
             ThreadIdPattern() = default;
             ~ThreadIdPattern() = default;
             IData* getPattern() const override;
+            static bool toDelete();
         private:
         };
     }

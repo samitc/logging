@@ -4,9 +4,20 @@ namespace Sys
 {
     namespace Logging
     {
+        ProcessDataPattern::ProcessDataPattern() :cacheDataProcess(new ProcessData())
+        {
+        }
+        ProcessDataPattern::~ProcessDataPattern()
+        {
+            delete cacheDataProcess;
+        }
         IData * ProcessDataPattern::getPattern() const
         {
-            return new ProcessData();
+            return cacheDataProcess;
+        }
+        bool ProcessDataPattern::toDelete()
+        {
+            return false;
         }
     }
 }

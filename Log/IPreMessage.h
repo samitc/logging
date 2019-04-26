@@ -13,11 +13,13 @@ namespace Sys
         {
             int index;
             IData* data;
+            bool toDelete;
         };
         struct IndexPattern
         {
             int index;
             BasePattern* data;
+            bool toDelete;
         };
         class IPreMessage
         {

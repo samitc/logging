@@ -4,12 +4,20 @@ namespace Sys
 {
     namespace Logging
     {
-        LoggerNamePattern::LoggerNamePattern(String && loggerName) :loggerName(std::move(loggerName))
+        LoggerNamePattern::LoggerNamePattern(String&& loggerName) :loggerName(std::move(loggerName)), cacheLoggerName(new LoggerName(loggerName))
         {
+        }
+        LoggerNamePattern::~LoggerNamePattern()
+        {
+            delete cacheLoggerName;
         }
         IData * Sys::Logging::LoggerNamePattern::getPattern() const
         {
-            return new LoggerName(loggerName);
+            return cacheLoggerName;
+        }
+        bool LoggerNamePattern::toDelete()
+        {
+            return false;
         }
     }
 }

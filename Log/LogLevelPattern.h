@@ -11,6 +11,7 @@ namespace Sys
             LogLevelPattern() = default;
             ~LogLevelPattern() = default;
             IData* getPattern() const override;
+            static bool toDelete();
         private:
         };
     }

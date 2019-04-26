@@ -8,5 +8,9 @@ namespace Sys
         {
             return new DateTime();
         }
+        bool DateTimePattern::toDelete()
+        {
+            return true;
+        }
     }
 }

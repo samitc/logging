@@ -34,7 +34,7 @@ namespace Sys
         {
             return unDatas.size();
         }
-        void copyDataToArray(const std::list<IndexPattern> datas, IndexData* datasArray)
+        void copyDataToArray(const std::list<IndexPattern> &datas, IndexData* datasArray)
         {
             int i = 0;
             auto sc = datas.cbegin(), ec = datas.cend();
@@ -42,6 +42,7 @@ namespace Sys
             {
                 datasArray[i].index = sc->index;
                 datasArray[i].data = sc->data->getPattern();
+                datasArray[i].toDelete = sc->toDelete;
                 i++;
                 sc++;
             }
@@ -54,16 +55,17 @@ namespace Sys
         {
             copyDataToArray(unDatas, datasArray);
         }
-        IndexPattern createIndexPattern(BasePattern* pattern, int index)
+        IndexPattern createIndexPattern(BasePattern* pattern, int index,bool toDelete)
         {
             IndexPattern ip;
             ip.data = pattern;
             ip.index = index;
+            ip.toDelete = toDelete;
             return ip;
         }
-        void addPattern(BasePattern* pattern, std::list<IndexPattern> &datas, int& index)
+        template <typename T, typename... ArgTypes> void addPattern(std::list<IndexPattern>& datas, int& index, ArgTypes&& ... args)
         {
-            datas.push_back(createIndexPattern(pattern, index));
+            datas.push_back(createIndexPattern(new T(std::forward<ArgTypes>(args)...), index, T::toDelete()));
             index++;
         }
         void IPreMessage::Init(const UTF8* pattern, const UTF8* logName)
@@ -79,31 +81,31 @@ namespace Sys
                     l = this->getDataType(p);
                     if (equalsCaseInsensitive(l, "d", 1))
                     {
-                        addPattern(new DateTimePattern(), nDatas, i);
+                        addPattern<DateTimePattern>(nDatas, i);
                     }
                     else if (equalsCaseInsensitive(l, "pid", 3))
                     {
-                        addPattern(new ProcessDataPattern(), nDatas, i);
+                        addPattern<ProcessDataPattern>(nDatas, i);
                     }
                     else if (equalsCaseInsensitive(l, "msg", 3))
                     {
-                        addPattern(new MsgPattern(), unDatas, i);
+                        addPattern< MsgPattern>(unDatas, i);
                     }
                     else if (equalsCaseInsensitive(l, "tid", 3))
                     {
-                        addPattern(new ThreadIdPattern(), nDatas, i);
+                        addPattern<ThreadIdPattern>(nDatas, i);
                     }
                     else if (equalsCaseInsensitive(l, "lname", 5))
                     {
-                        addPattern(new LoggerNamePattern(String(logName)), unDatas, i);
+                        addPattern<LoggerNamePattern>(unDatas, i, String(logName));
                     }
                     else if (equalsCaseInsensitive(l, "pname", 5))
                     {
-                        addPattern(new ProcessNamePattern(), nDatas, i);
+                        addPattern< ProcessNamePattern>(nDatas, i);
                     }
                     else if (equalsCaseInsensitive(l, "llevel", 6))
                     {
-                        addPattern(new LogLevelPattern(), unDatas, i);
+                        addPattern<LogLevelPattern>(unDatas, i);
                     }
                     else
                     {

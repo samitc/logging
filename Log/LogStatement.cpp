@@ -126,7 +126,10 @@ namespace Sys
             }
             for (size_t i = 0; i < sizeOfUnData; i++)
             {
-                delete unData[i].data;
+                if (unData[i].toDelete)
+                {
+                    delete unData[i].data;
+                }
             }
             strcat(fP, nonPat + curStrIndex);
             String r(finalStr);

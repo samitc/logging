@@ -8,5 +8,9 @@ namespace Sys
         {
             return new Msg();
         }
+        bool MsgPattern::toDelete()
+        {
+            return false;
+        }
     }
 }

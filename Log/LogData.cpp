@@ -18,7 +18,10 @@ namespace Sys
             delete[] msg;
             for (size_t i = 0; i < sizeOfDatas; i++)
             {
-                delete datas[i].data;
+                if (datas[i].toDelete)
+                {
+                    delete datas[i].data;
+                }
             }
             delete[] datas;
         }

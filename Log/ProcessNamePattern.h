@@ -8,10 +8,12 @@ namespace Sys
         class ProcessNamePattern :public BasePattern
         {
         public:
-            ProcessNamePattern() = default;
-            ~ProcessNamePattern() = default;
+            ProcessNamePattern();
+            ~ProcessNamePattern();
             IData* getPattern() const override;
+            static bool toDelete();
         private:
+            IData* cacheProcessName;
         };
     }
 }

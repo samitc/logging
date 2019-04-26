@@ -11,6 +11,7 @@ namespace Sys
             MsgPattern() = default;
             ~MsgPattern() = default;
             IData* getPattern() const override;
+            static bool toDelete();
         private:
         };
     }

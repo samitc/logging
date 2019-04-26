@@ -11,6 +11,7 @@ namespace Sys
             DateTimePattern() = default;
             ~DateTimePattern() = default;
             IData* getPattern() const override;
+            static bool toDelete();
         private:
 
         };

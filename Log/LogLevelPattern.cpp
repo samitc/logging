@@ -8,5 +8,9 @@ namespace Sys
         {
             return new LogLevel();
         }
+        bool LogLevelPattern::toDelete()
+        {
+            return false;
+        }
     }
 }

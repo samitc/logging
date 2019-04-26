@@ -12,9 +12,11 @@ namespace Sys
         public:
             LoggerNamePattern() = delete;
             explicit LoggerNamePattern(String&& loggerName);
-            ~LoggerNamePattern() = default;
+            ~LoggerNamePattern();
             IData* getPattern() const override;
+            static bool toDelete();
         private:
+            IData* cacheLoggerName;
             String loggerName;
         };
     }

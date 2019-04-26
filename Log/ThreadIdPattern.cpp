@@ -8,5 +8,9 @@ namespace Sys
         {
             return new ThreadId();
         }
+        bool ThreadIdPattern::toDelete()
+        {
+            return true;
+        }
     }
 }
