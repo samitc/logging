@@ -13,9 +13,11 @@ namespace Sys
         public:
             DateTime();
             virtual ~DateTime();
-            virtual UTF8 * getData(const UTF8 * pattern) const;
+            const UTF8 * getData(const UTF8 * pattern) const;
         protected:
             std::chrono::time_point<std::chrono::system_clock> time;
+        private:
+            mutable UTF8* date;
         };
     }
 }

@@ -8,7 +8,7 @@ namespace Sys
 		class IData
 		{
 		public:
-			virtual UTF8 * getData(const UTF8 * pattern) const = 0;
+			virtual const UTF8 * getData(const UTF8 * pattern) const = 0;
 			virtual ~IData() = default;
 		};
 	}

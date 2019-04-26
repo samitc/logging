@@ -13,23 +13,23 @@ namespace Sys
     namespace Logging
     {
 #define MAX_LEVEL   255
-        void Logger::log(const char * level, const UTF8 * msg, String & name, bool writeImmediately) const
+        void Logger::log(const char * level, const UTF8 * msg, const UTF8* name, bool writeImmediately) const
         {
             String levelS(level);
             Configuration* config = this->config.load(std::memory_order_acquire)->addRef();
-            this->log(config->getLevels().at(levelS), msg, levelS, name, writeImmediately);
+            this->plog(config->getLevels().at(levelS), msg, level, name, writeImmediately);
             config->removeRef();
         }
-        void Logger::log(unsigned int level, const UTF8 *msg, const String &sLevel, const String &name, bool writeIm) const
+        void Logger::plog(unsigned int level, const UTF8* msg, const UTF8* sLevel, const UTF8* name, bool writeIm) const
         {
             if (checkLevel(level))
             {
                 Configuration* config = this->config.load(std::memory_order_acquire)->addRef();
-                writeIm |= std::find_if(config->getImmLevels().cbegin(), config->getImmLevels().cend(), [&sLevel](const String& str)
+                writeIm |= std::find_if(config->getImmLevels().cbegin(), config->getImmLevels().cend(), [&sLevel](const String str)
                 {
-                    return sLevel == str;
+                    return !strcmp(sLevel, str.c_str());
                 }) != config->getImmLevels().cend();
-                loggerManager.log(config, sLevel.c_str(), msg, name.c_str(), writeIm);
+                loggerManager.log(config, sLevel, msg, name, writeIm);
             }
         }
         void Logger::log(unsigned short level, const UTF8 * msg) const
@@ -68,49 +68,39 @@ namespace Sys
                 delete[] lv;
             }
         }
-        void Logger::log(const String & level, const UTF8 * msg) const
+        void Logger::log(const UTF8* level, const UTF8* msg) const
         {
             Configuration* config = this->config.load(std::memory_order_acquire)->addRef();
-            this->log(config->getLevels().at(level), msg, level, name, false);
+            this->plog(config->getLevels().at(String(level)), msg, level, name, false);
             config->removeRef();
         }
-        void Logger::log(const char * level, const UTF8 * msg) const
-        {
-            this->log(String(level), msg);
-        }
-        void Logger::log(const char * level, const UTF8 * msg, const String & name) const
+        void Logger::log(const UTF8* level, const UTF8 * msg, const UTF8* name) const
         {
             Configuration* config = this->config.load(std::memory_order_acquire)->addRef();
-            this->log(config->getLevels().at(String(level)), msg, String(level), name, false);
+            this->plog(config->getLevels().at(String(level)), msg, level, name, false);
             config->removeRef();
         }
-        void Logger::log(const char * level, const UTF8 * msg, bool writeImmediately) const
+        void Logger::log(const UTF8* level, const UTF8 * msg, bool writeImmediately) const
         {
             Configuration* config = this->config.load(std::memory_order_acquire)->addRef();
-            this->log(config->getLevels().at(String(level)), msg, String(level), name, writeImmediately);
+            this->plog(config->getLevels().at(String(level)), msg, level, name, writeImmediately);
             config->removeRef();
         }
-        void Logger::log(unsigned short level, const std::function<String()>& msg) const
+        void Logger::log(unsigned short level, const std::function<const UTF8*()>& msg) const
         {
-            this->log(level, msg().c_str());
+            this->log(level, msg());
         }
-        void Logger::log(const String & level, const std::function<String()>& msg) const
+        void Logger::log(const UTF8* level, const std::function<const UTF8*()>& msg) const
         {
-            Configuration* config = this->config.load(std::memory_order_acquire)->addRef();
-            this->log(config->getLevels().at(level), msg);
-            config->removeRef();
+            this->log(level, msg());
         }
-        void Logger::log(const char * level, const std::function<String()>& msg) const
+        void Logger::log(const UTF8* level, const std::function<const UTF8*()>& msg, const UTF8* name) const
         {
-            this->log(String(level), msg);
+            this->log(level, msg(), name);
         }
-        void Logger::log(const char * level, const std::function<String()>& msg, const String & name) const
+        void Logger::log(const UTF8* level, const std::function<const UTF8* ()>&msg, bool writeImmediately) const
         {
-            this->log(level, msg().c_str(), name);
-        }
-        void Logger::log(const char * level, const std::function<String()>&msg, bool writeImmediately) const
-        {
-            this->log(level, msg().c_str(), writeImmediately);
+            this->log(level, msg(), writeImmediately);
         }
         void Logger::debug(const UTF8 * msg) const
         {
@@ -160,27 +150,27 @@ namespace Sys
         {
             this->log("trace", msg, writeImmediately);
         }
-        void Logger::debug(const UTF8 * msg, const String & name) const
+        void Logger::debug(const UTF8 * msg, const UTF8* name) const
         {
             this->log("debug", msg, name);
         }
-        void Logger::fatal(const UTF8 * msg, const String & name) const
+        void Logger::fatal(const UTF8 * msg, const UTF8* name) const
         {
             this->log("fatal", msg, name);
         }
-        void Logger::error(const UTF8 * msg, const String & name) const
+        void Logger::error(const UTF8 * msg, const UTF8* name) const
         {
             this->log("error", msg, name);
         }
-        void Logger::info(const UTF8 * msg, const String & name) const
+        void Logger::info(const UTF8 * msg, const UTF8* name) const
         {
             this->log("info", msg, name);
         }
-        void Logger::warn(const UTF8 * msg, const String & name) const
+        void Logger::warn(const UTF8 * msg, const UTF8* name) const
         {
             this->log("warn", msg, name);
         }
-        void Logger::trace(const UTF8 * msg, const String & name) const
+        void Logger::trace(const UTF8 * msg, const UTF8* name) const
         {
             this->log("trace", msg, name);
         }
@@ -268,31 +258,40 @@ namespace Sys
             config->removeRef();
             return ret;
         }
-        Logger::Logger(ConcurrencyLevel level) :config(), fileName(nullptr), logNumber(0), loggerManager(level)
+        UTF8* createOrNull(const UTF8* str)
+        {
+            if (str==nullptr)
+            {
+                return nullptr;
+            }
+            else
+            {
+                return createStr(str);
+            }
+        }
+        Logger::Logger(const ILoggerData& logger, int loggerNumber, ConcurrencyLevel level) : Logger(logger, loggerNumber, nullptr, level)
         {
         }
-        Logger::Logger(int concurrencyLevel) : config(), fileName(nullptr), logNumber(0), loggerManager(concurrencyLevel)
-        {
-        }
-        Logger::Logger(const ILoggerData & logger, int loggerNumber, ConcurrencyLevel level) : Logger(level)
+        Logger::Logger(const ILoggerData& logger, int loggerNumber, const UTF8* name, ConcurrencyLevel level) : name(createOrNull(name)), logNumber(0), config(), fileName(nullptr), loggerManager(level)
         {
             reloadConfig(logger, loggerNumber);
         }
-        Logger::Logger(const ILoggerData &logger, int loggerNumber, const String &name, ConcurrencyLevel level) : Logger(logger, loggerNumber, level)
+        Logger::Logger(const ILoggerData& logger, int loggerNumber, int concurrencyLevel) : Logger(logger, loggerNumber, nullptr, concurrencyLevel)
         {
-            this->name = name;
         }
-        Logger::Logger(const ILoggerData & logger, int loggerNumber, int concurrencyLevel) : Logger(concurrencyLevel)
+        Logger::Logger(const ILoggerData& logger, int loggerNumber, const UTF8* name, int concurrencyLevel) : name(createOrNull(name)), logNumber(0), config(), fileName(nullptr), loggerManager(concurrencyLevel)
         {
             reloadConfig(logger, loggerNumber);
-        }
-        Logger::Logger(const ILoggerData & logger, int loggerNumber, const String & name, int concurrencyLevel) : Logger(logger, loggerNumber, concurrencyLevel)
-        {
-            this->name = name;
         }
         Logger::Logger(Logger &&copy) : config(copy.config.load(std::memory_order_acquire)), name(std::move(copy.name)), loggerManager(std::move(copy.loggerManager))
         {
             copy.config.store(nullptr, std::memory_order_relaxed);
+        }
+        Logger::Logger(ConcurrencyLevel level) : loggerManager(level)
+        {
+        }
+        Logger::Logger(int concurrencyLevel) : loggerManager(concurrencyLevel)
+        {
         }
         Logger::~Logger()
         {

@@ -10,7 +10,7 @@ namespace Sys
         {
         public:
             static UTF8* msgStr;
-            virtual UTF8 * getData(const UTF8 * pattern) const;
+            const UTF8 * getData(const UTF8 * pattern) const;
         };
     }
 }

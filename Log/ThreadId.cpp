@@ -21,11 +21,10 @@ namespace Sys
         ThreadId::ThreadId() :id(getThreadId())
         {
         }
-        UTF8* ThreadId::getData(const UTF8* pattern) const
+        const UTF8* ThreadId::getData(const UTF8* pattern) const
         {
-            UTF8* te = new UTF8[11];
-            itca(id, te, 10);
-            return te;
+            itca(id, ts, TS_SIZE - 1);
+            return ts;
         }
     }
 }

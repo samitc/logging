@@ -22,11 +22,10 @@ namespace Sys
         ProcessData::ProcessData() :ID(getProcessId())
         {
         }
-        UTF8* ProcessData::getData(const UTF8* pattern) const
+        const UTF8* ProcessData::getData(const UTF8* pattern) const
         {
-            UTF8* te = new UTF8[11];
-            itca(ID, te, 10);
-            return te;
+            itca(ID, ts, TS_SIZE - 1);
+            return ts;
         }
     }
 }

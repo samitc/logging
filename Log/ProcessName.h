@@ -11,7 +11,7 @@ namespace Sys
         {
         public:
             ProcessName();
-            UTF8* getData(const UTF8 * pattern) const override;
+            const UTF8* getData(const UTF8 * pattern) const override;
         private:
             static CONSTEXPRN int BUFFER_SIZE = FILENAME_MAX;
             UTF8 name[BUFFER_SIZE];

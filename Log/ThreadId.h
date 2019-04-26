@@ -11,9 +11,11 @@ namespace Sys
         {
         public:
             ThreadId();
-            UTF8 * getData(const UTF8 * pattern) const override;
+            const UTF8* getData(const UTF8* pattern) const override;
         protected:
+            static const int TS_SIZE = 11;
             size_t id;
+            mutable UTF8 ts[TS_SIZE];
         };
     }
 }

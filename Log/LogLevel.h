@@ -12,7 +12,7 @@ namespace Sys
             static UTF8* levelStr;
             LogLevel() = default;
             ~LogLevel() = default;
-            virtual UTF8 * getData(const UTF8 * pattern) const;
+            const UTF8 * getData(const UTF8 * pattern) const;
         private:
 
         };

@@ -38,7 +38,7 @@ namespace Sys
         }
         DateTime::~DateTime()
         {
-
+            delete[]date;
         }
 #define CREATE_PATTERN_CASE(letter,func)\
         case letter:\
@@ -48,7 +48,7 @@ namespace Sys
         l += digitCount;\
         break;
 
-        UTF8 * DateTime::getData(const UTF8 * pattern) const
+        const UTF8 * DateTime::getData(const UTF8 * pattern) const
         {
             DateTimeWrapper time = getTimeFromNow(this->time);
             int patternCount;
@@ -79,13 +79,13 @@ namespace Sys
                 curIndex++;
             }
             l++;
-            UTF8* ret = new UTF8[l];
-            ret[0] = 0;
+            date = new UTF8[l];
+            date[0] = 0;
             for (int i = 0; i < curIndex; i++)
             {
-                strcat(ret, temp + (i * (patternL * sizeof(UTF8) + 1)));
+                strcat(date, temp + (i * (patternL * sizeof(UTF8) + 1)));
             }
-            return ret;
+            return date;
         }
         int countLetter(const UTF8 * str, const char l)
         {

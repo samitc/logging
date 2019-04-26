@@ -23,7 +23,6 @@ namespace LogTesting
         expectedMsg.append(".message is : message\n");
         createDatas;
         EXPECT;
-        delete[]tData;
         destroyDatas
     }
     TEST(LogStatementTest, testPatternTrim)

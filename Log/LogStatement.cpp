@@ -11,38 +11,6 @@ namespace Sys
 #define MAX_LOG_SIZE    4096
 #define MESSAGE_ID      0
 #define LEVEL_ID        4
-        static char* addSpecialStr(char* str, int msgIndex, const char* msg, int levelIndex, const char* level)
-        {
-            ReplaceData datas[2];
-            ReplaceData msgData;
-            msgData.strToPut = msg;
-            msgData.pos = msgIndex;
-            msgData.charToDelete = 0;
-            int count = 2;
-            if (msgIndex > levelIndex)
-            {
-                if (levelIndex != -1)
-                {
-                    datas[0].strToPut = level;
-                    datas[0].pos = levelIndex;
-                    datas[0].charToDelete = 0;
-                    datas[1] = msgData;
-                }
-                else
-                {
-                    datas[0] = msgData;
-                    count = 1;
-                }
-            }
-            else
-            {
-                datas[0] = msgData;
-                datas[1].strToPut = level;
-                datas[1].pos = levelIndex;
-                datas[1].charToDelete = 0;
-            }
-            return replace(str, datas, count);
-        }
         LogStatement::LogStatement(const PreMessage* preMessage, const char* msg, const String& level) :ILogStatement(preMessage), level(level)
         {
             register int l = strlen(msg) + 1;
@@ -105,23 +73,17 @@ namespace Sys
                     nPat += nonPatIndex - curStrIndex;
                     curStrIndex = nonPatIndex;
                 }
-                UTF8* t = dat->getData(((PreMessage*)(this->getMsg()))->getPaterenAt(index));
+                const UTF8* t = dat->getData(((PreMessage*)(this->getMsg()))->getPaterenAt(index));
                 if (!strcmp(t, Msg::msgStr))
                 {
-                    strcat(fP, message);
-                    fP += strlen(message);
+                    t = message;
                 }
                 else if (!strcmp(t, LogLevel::levelStr))
                 {
-                    strcat(fP, level.c_str());
-                    fP += level.size();
+                    t = level.c_str();
                 }
-                else
-                {
-                    strcat(fP, t);
-                    fP += strlen(t);
-                    delete[]t;
-                }
+                strcat(fP, t);
+                fP += strlen(t);
                 index++;
             }
             for (size_t i = 0; i < sizeOfUnData; i++)

@@ -11,9 +11,11 @@ namespace Sys
         {
         public:
             ProcessData();
-            virtual UTF8 * getData(const UTF8 * pattern) const;
+            const UTF8* getData(const UTF8 * pattern) const;
         protected:
             DWORD ID;
+            static const int TS_SIZE = 11;
+            mutable UTF8 ts[TS_SIZE];
         };
     }
 }

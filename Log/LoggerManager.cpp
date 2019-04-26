@@ -77,7 +77,7 @@ namespace Sys
                                                      [level](const String &str) {
                                                          return !strcmp(level, str.c_str());
                                                      }) == config->getImmLevels().cend());
-            log(new LogData(config, msg, String(level), String(name), isWriteImmediately, logNumber++));
+            log(new LogData(config, msg, level, name, isWriteImmediately, logNumber++));
         }
         void LoggerManager::addToOutput(const LogData *logData) const
         {

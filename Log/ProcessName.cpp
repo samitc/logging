@@ -40,20 +40,16 @@ namespace Sys
         {
             getProcessName(name, BUFFER_SIZE);
         }
-        UTF8 * ProcessName::getData(const UTF8 * pattern) const
+        const UTF8 * ProcessName::getData(const UTF8 * pattern) const
         {
-            const UTF8* end = name;
-            while (*end != 0)
-            {
-                ++end;
-            }
+            const UTF8* end = name + strlen(name);
             const UTF8* start = end;
             while (*start != '\\')
             {
                 --start;
             }
             ++start;
-            return createStr(start);
+            return start;
         }
     }
 }

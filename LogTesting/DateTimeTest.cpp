@@ -23,49 +23,43 @@ namespace LogTesting
     TEST(DateTimeTest, testOnlyYear)
     {
         DateTimeMock dateTime;
-        UTF8 *data = dateTime.getData("y");
+        const UTF8 *data = dateTime.getData("y");
         auto expected = std::to_string(getLocalTime(dateTime.getTime())->tm_year + 1900);
         EXPECT_STREQ(expected.c_str(), data);
-        delete[]data;
     }
     TEST(DateTimeTest, testOnlyMonth)
     {
         DateTimeMock dateTime;
-        UTF8 *data = dateTime.getData("M");
+        const UTF8 *data = dateTime.getData("M");
         auto expected = std::to_string(getLocalTime(dateTime.getTime())->tm_mon + 1);
         EXPECT_STREQ(expected.c_str(), data);
-        delete[]data;
     }
     TEST(DateTimeTest, testOnlyDay)
     {
         DateTimeMock dateTime;
-        UTF8 *data = dateTime.getData("d");
+        const UTF8 *data = dateTime.getData("d");
         auto expected = std::to_string(getLocalTime(dateTime.getTime())->tm_mday);
         EXPECT_STREQ(expected.c_str(), data);
-        delete[]data;
     }
     TEST(DateTimeTest, testOnlyHour)
     {
         DateTimeMock dateTime;
-        UTF8 *data = dateTime.getData("h");
+        const UTF8 *data = dateTime.getData("h");
         auto expected = std::to_string(getLocalTime(dateTime.getTime())->tm_hour);
         EXPECT_STREQ(expected.c_str(), data);
-        delete[]data;
     }
     TEST(DateTimeTest, testOnlyMinute)
     {
         DateTimeMock dateTime;
-        UTF8 *data = dateTime.getData("m");
+        const UTF8 *data = dateTime.getData("m");
         auto expected = std::to_string(getLocalTime(dateTime.getTime())->tm_min);
         EXPECT_STREQ(expected.c_str(), data);
-        delete[]data;
     }
     TEST(DateTimeTest, testOnlySecond)
     {
         DateTimeMock dateTime;
-        UTF8 *data = dateTime.getData("s");
+        const UTF8 *data = dateTime.getData("s");
         auto expected = std::to_string(getLocalTime(dateTime.getTime())->tm_sec);
         EXPECT_STREQ(expected.c_str(), data);
-        delete[]data;
     }
 }

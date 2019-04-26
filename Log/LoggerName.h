@@ -12,7 +12,7 @@ namespace Sys
         {
         public:
             explicit LoggerName(const String&);
-            virtual UTF8 * getData(const UTF8 * pattern) const;
+            const UTF8 * getData(const UTF8 * pattern) const;
         private:
             String loggerName;
         };
