@@ -6,8 +6,8 @@ namespace Sys
 {
     namespace Logging
     {
-        LogData::LogData(Configuration *config, const UTF8 * msg, const String & level, const String & name, bool writeImmediately, std::list<IData*>& datas, uint64_t logNumber) :
-            config(config), datas(datas), msg(createStr(msg)), level(level), name(name), shouldWriteInstantly(writeImmediately), logNumber(logNumber)
+        LogData::LogData(Configuration* config, const UTF8* msg, const String& level, const String& name, bool writeImmediately, IndexData* datas, int datasSize, uint64_t logNumber) :
+            config(config), datas(datas), sizeOfDatas(datasSize), msg(createStr(msg)), level(level), name(name), shouldWriteInstantly(writeImmediately), logNumber(logNumber)
         {
         }
         LogData::LogData(const UTF8 * msg) : msg(msg), shouldWriteInstantly(false)
@@ -16,10 +16,11 @@ namespace Sys
         LogData::~LogData()
         {
             delete[] msg;
-            for (const auto dat : datas)
+            for (size_t i = 0; i < sizeOfDatas; i++)
             {
-                delete dat;
+                delete datas[i].data;
             }
+            delete[] datas;
         }
         const char * LogData::getMsg() const
         {
@@ -49,9 +50,13 @@ namespace Sys
         {
             this->logNumber = logNumber;
         }
-        const std::list<IData*>& LogData::getDatas() const
+        const IndexData* LogData::getDatas() const
         {
             return datas;
+        }
+        int LogData::getDatasSize() const
+        {
+            return sizeOfDatas;
         }
         Configuration * LogData::getConfig() const
         {

@@ -13,7 +13,6 @@ namespace Sys
         public:
             explicit LoggerName(const String&);
             virtual UTF8 * getData(const UTF8 * pattern) const;
-            int getNumber() const override;
         private:
             String loggerName;
         };

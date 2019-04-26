@@ -10,22 +10,22 @@ namespace Sys
 {
     namespace Logging
     {
+        size_t getThreadId()
+        {
 #if defined(WINDOWS)
-        ThreadId::ThreadId() :id(GetCurrentThreadId())
+            return GetCurrentThreadId();
 #elif defined(LINUX)
-        ThreadId::ThreadId() : id(syscall(SYS_gettid))
+            return syscall(SYS_gettid);
 #endif
+        }
+        ThreadId::ThreadId() :id(getThreadId())
         {
         }
-        UTF8 * ThreadId::getData(const UTF8 * pattern) const
+        UTF8* ThreadId::getData(const UTF8* pattern) const
         {
-            UTF8 *te = new UTF8[11];
+            UTF8* te = new UTF8[11];
             itca(id, te, 10);
             return te;
-        }
-        int ThreadId::getNumber() const
-        {
-            return 6;
         }
     }
 }

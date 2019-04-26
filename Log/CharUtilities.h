@@ -27,7 +27,7 @@ namespace Sys
         String createString(const UTF8*);
         void stringToLower(char * UTF8);
         void stringToUpper(char *UTF8);
-        bool equels(const UTF8 * strA, const UTF8 * strB, int count);
+        bool equalsCaseInsensitive(const UTF8 * strA, const UTF8 * strB, int count);
         char* fromUtf8(const UTF8*);
         UTF8* toUtf8(const char*);
         UTF8* createStr(const UTF8*);

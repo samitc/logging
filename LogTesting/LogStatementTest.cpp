@@ -7,6 +7,11 @@
 using namespace Sys::Logging;
 namespace LogTesting 
 {
+#define createDatas int datasSize = pm.getNumOfNecessaryData();\
+    IndexData* datas = (IndexData*)alloca(datasSize * sizeof(IndexData));\
+    pm.getNecessaryData(datas);
+#define destroyDatas for (size_t i = 0; i < datasSize; i++){delete datas[i].data;}
+#define EXPECT EXPECT_STREQ((expectedMsg).c_str(), (ls).getMessage(datas, datasSize).c_str());
     TEST(LogStatementTest, testUnnecessaryDataThenNecessary)
     {
         ThreadId t;
@@ -16,40 +21,45 @@ namespace LogTesting
         auto tData = t.getData(nullptr);
         expectedMsg.append(tData);
         expectedMsg.append(".message is : message\n");
-        auto necessaryData = pm.getNecessaryData();
-        EXPECT_STREQ(expectedMsg.c_str(), ls.getMessage(necessaryData).c_str());
-        delete []tData;
-        for (auto n : necessaryData)
-        {
-            delete n;
-        }
+        createDatas;
+        EXPECT;
+        delete[]tData;
+        destroyDatas
     }
     TEST(LogStatementTest, testPatternTrim)
     {
         PreMessage pm("@[msg].", "logname");
         LogStatement ls(&pm, "message", String("test_level"));
-        String expextedMsg = String("message.\n");
-        EXPECT_STREQ(expextedMsg.c_str(), ls.getMessage(pm.getNecessaryData()).c_str());
+        String expectedMsg = String("message.\n");
+        createDatas;
+        EXPECT;
+        destroyDatas;
     }
     TEST(LogStatementTest, testNonPatternStart)
     {
         PreMessage pm(".@[msg].", "logname");
         LogStatement ls(&pm, "message", String("test_level"));
-        String expextedMsg = String(".message.\n");
-        EXPECT_STREQ(expextedMsg.c_str(), ls.getMessage(pm.getNecessaryData()).c_str());
+        String expectedMsg = String(".message.\n");
+        createDatas;
+        EXPECT;
+        destroyDatas;
     }
     TEST(LogStatementTest, testPatternOnly)
     {
         PreMessage pm("@[msg]", "logname");
         LogStatement ls(&pm, "message", String("test_level"));
-        String expextedMsg = String("message\n");
-        EXPECT_STREQ(expextedMsg.c_str(), ls.getMessage(pm.getNecessaryData()).c_str());
+        String expectedMsg = String("message\n");
+        createDatas;
+        EXPECT;
+        destroyDatas;
     }
     TEST(LogStatementTest, testNonPatternOnly)
     {
         PreMessage pm("pattern", "logname");
         LogStatement ls(&pm, "message", String("test_level"));
-        String expextedMsg = String("pattern\n");
-        EXPECT_STREQ(expextedMsg.c_str(), ls.getMessage(pm.getNecessaryData()).c_str());
+        String expectedMsg = String("pattern\n");
+        createDatas;
+        EXPECT;
+        destroyDatas;
     }
 }

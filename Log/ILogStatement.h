@@ -9,15 +9,17 @@ namespace Sys
     {
         class IPreMessage;
         class IData;
+        struct IndexData;
         class ILogStatement
         {
         public:
             explicit ILogStatement(const IPreMessage *preMessage);
-            virtual ~ILogStatement();
-            virtual String getMessage(const std::list<IData*>&) const = 0;
+            virtual ~ILogStatement() = default;
+            virtual String getMessage(const IndexData* nData, int nSize) const = 0;
         protected:
+            const IPreMessage* getMsg() const;
+        private:
             const IPreMessage * msg;
-            std::list<IData*> *datas;
         };
     }
 }

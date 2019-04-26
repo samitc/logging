@@ -7,16 +7,18 @@ namespace Sys
 {
     namespace Logging
     {
-        PreMessage::PreMessage(const UTF8 * patteren, const UTF8* logName) :IPreMessage(patteren, logName)
+        PreMessage::PreMessage(const UTF8* patteren, const UTF8* logName) :IPreMessage(patteren, logName)
         {
-            this->specificPatterens = new UTF8*[IPreMessage::datas.size()];
-            this->spesificPatIndex = new int[IPreMessage::datas.size()];
+            int patternSize = nDatas.size() + unDatas.size();
+            this->specificPatterens = new UTF8 * [patternSize];
+            this->spesificPatIndex = new int[patternSize];
             this->Init(patteren);
             this->logName = createStr(logName);
         }
         PreMessage::~PreMessage()
         {
-            for (int i = 0, count = IPreMessage::datas.size(); i < count; i++)
+            int patternSize = nDatas.size() + unDatas.size();
+            for (int i = 0; i < patternSize; i++)
             {
                 if (this->specificPatterens[i] != nullptr)
                 {

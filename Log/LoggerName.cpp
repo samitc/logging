@@ -11,9 +11,5 @@ namespace Sys
         {
             return createStr(loggerName.c_str());
         }
-        int LoggerName::getNumber() const
-        {
-            return 5;
-        }
     }
 }

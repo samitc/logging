@@ -10,10 +10,11 @@ namespace Sys
     {
         class IData;
         class Configuration;
+        struct IndexData;
         class LogData
         {
         public:
-            LogData(Configuration *config, const UTF8* msg, const String &level, const String &name, bool writeImmediately, std::list<IData*>&, uint64_t logNumber);
+            LogData(Configuration* config, const UTF8* msg, const String& level, const String& name, bool writeImmediately, IndexData*, int, uint64_t logNumber);
             explicit LogData(const UTF8* msg);
             ~LogData();
             const char * getMsg() const;
@@ -23,12 +24,14 @@ namespace Sys
             void setMsg(UTF8*);
             uint64_t getLogNumber() const;
             void setLogNumber(uint64_t logNumber);
-            const std::list<IData*>& getDatas() const;
+            const IndexData* getDatas() const;
+            int getDatasSize() const;
             Configuration* getConfig() const;
         private:
             uint64_t logNumber;
             Configuration* config;
-            std::list<IData*> datas;
+            IndexData* datas;
+            int sizeOfDatas;
             const UTF8* msg;
             String level;
             String name;

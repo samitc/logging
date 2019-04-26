@@ -1,12 +1,9 @@
 cmake_minimum_required(VERSION 3.1)
 project(log)
 set(COMMON_SOURCE
-        Log/BasePattern.cpp
         Log/CharUtilities.cpp
         Log/Configuration.cpp
         Log/ConsoleWriter.cpp
-        Log/DateTime.cpp
-        Log/DateTimePattern.cpp
         Log/DynamicLogger.cpp
         Log/FileWriter.cpp
         Log/ILoggerData.cpp
@@ -18,26 +15,13 @@ set(COMMON_SOURCE
         Log/LogData.cpp
         Log/LogFilter.cpp
         Log/Logger.cpp
-        Log/LoggerName.cpp
-        Log/LoggerNamePattern.cpp
-        Log/LogLevel.cpp
-        Log/LogLevelPattern.cpp
         Log/LogStatement.cpp
-        Log/Msg.cpp
-        Log/MsgPattern.cpp
         Log/NetworkWriter.cpp
         Log/OutputProcess.cpp
         Log/PreMessage.cpp
-        Log/ProcessData.cpp
-        Log/ProcessDataPattern.cpp
         Log/ProcessLog.cpp
-        Log/ProcessName.cpp
-        Log/ProcessNamePattern.cpp
-        Log/ThreadId.cpp
-        Log/ThreadIdPattern.cpp
         Log/XmlLogger.cpp
-		Log/LString.cpp
-        )
+		Log/LString.cpp)
 set(TEST_SOURCE
         LogTesting/PerformanceTest.cpp
         LogTesting/PerformanceTest.h
@@ -49,8 +33,31 @@ set(TEST_SOURCE
         LogTesting/LoggerListener.h
         LogTesting/LoggerListener.cpp
         LogTesting/DateTimeTest.cpp)
+SET(PATTERN_SOURCE
+        Log/DateTimePattern.cpp
+        Log/ThreadIdPattern.cpp
+        Log/ProcessNamePattern.cpp
+        Log/ProcessDataPattern.cpp
+        Log/LogLevelPattern.cpp
+        Log/LoggerNamePattern.cpp
+        Log/MsgPattern.cpp)
+SET(DATAS_SOURCE
+        Log/DateTime.cpp
+        Log/ProcessName.cpp
+        Log/ThreadId.cpp
+        Log/Msg.cpp
+        Log/LoggerName.cpp
+        Log/LogLevel.cpp
+        Log/ProcessData.cpp
+)
+SET(ALL_SOURCE
+		${COMMON_SOURCE}
+		${PATTERN_SOURCE}
+		${DATAS_SOURCE})
+SOURCE_GROUP("patterns" FILES ${PATTERN_SOURCE})
+SOURCE_GROUP("datas" FILES ${DATAS_SOURCE})
 set(CMAKE_DEBUG_POSTFIX "d")
-ADD_LIBRARY(log STATIC ${COMMON_SOURCE})
+ADD_LIBRARY(log STATIC ${ALL_SOURCE})
 find_package(Threads)
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake-modules")
 INCLUDE(AddCcons)

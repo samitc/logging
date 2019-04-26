@@ -87,10 +87,6 @@ namespace Sys
             }
             return ret;
         }
-        int DateTime::getNumber() const
-        {
-            return 3;
-        }
         int countLetter(const UTF8 * str, const char l)
         {
             int count = 0;

@@ -12,7 +12,6 @@ namespace Sys
         public:
             ProcessData();
             virtual UTF8 * getData(const UTF8 * pattern) const;
-            int getNumber() const override;
         protected:
             DWORD ID;
         };

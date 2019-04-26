@@ -9,8 +9,8 @@ namespace Sys
         class Msg :public IData
         {
         public:
+            static UTF8* msgStr;
             virtual UTF8 * getData(const UTF8 * pattern) const;
-            int getNumber() const override;
         };
     }
 }

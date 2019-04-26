@@ -11,22 +11,22 @@ namespace Sys
 {
     namespace Logging
     {
+        DWORD getProcessId()
+        {
 #ifdef WINDOWS
-        ProcessData::ProcessData() :ID(GetCurrentProcessId())
+            return GetCurrentProcessId();
 #elif defined(LINUX)
-        ProcessData::ProcessData() : ID(getpid())
+            return getpid();
 #endif
+        }
+        ProcessData::ProcessData() :ID(getProcessId())
         {
         }
-        UTF8 * ProcessData::getData(const UTF8 * pattern) const
+        UTF8* ProcessData::getData(const UTF8* pattern) const
         {
-            UTF8 *te = new UTF8[11];
+            UTF8* te = new UTF8[11];
             itca(ID, te, 10);
             return te;
-        }
-        int ProcessData::getNumber() const
-        {
-            return 2;
         }
     }
 }

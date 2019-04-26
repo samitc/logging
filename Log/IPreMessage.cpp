@@ -13,68 +13,97 @@ namespace Sys
         {
             this->Init(patterns, logName);
         }
+        template <typename T> void deleteList(std::list<T> l)
+        {
+            for (auto& i : l)
+            {
+                delete i.data;
+            }
+        }
         IPreMessage::~IPreMessage()
         {
             delete[] this->patteren;
-            for (auto &dat : datas)
+            deleteList(nDatas);
+            deleteList(unDatas);
+        }
+        int IPreMessage::getNumOfNecessaryData() const
+        {
+            return nDatas.size();
+        }
+        int IPreMessage::getNumOfUnNecessaryData() const
+        {
+            return unDatas.size();
+        }
+        void copyDataToArray(const std::list<IndexPattern> datas, IndexData* datasArray)
+        {
+            int i = 0;
+            auto sc = datas.cbegin(), ec = datas.cend();
+            while (sc != ec)
             {
-                delete dat;
+                datasArray[i].index = sc->index;
+                datasArray[i].data = sc->data->getPattern();
+                i++;
+                sc++;
             }
         }
-        void IPreMessage::Init(const UTF8 * pattern, const UTF8* logName)
+        void IPreMessage::getNecessaryData(IndexData* datasArray) const
         {
-            UTF8 *patterns = createStr(pattern);
-            stringToLower(patterns);
-            UTF8 * p = patterns;
-            UTF8 * pre = p;
-            UTF8 * l;
-            BasePattern *add;
+            copyDataToArray(nDatas, datasArray);
+        }
+        void IPreMessage::getUnNecessaryData(IndexData* datasArray) const
+        {
+            copyDataToArray(unDatas, datasArray);
+        }
+        IndexPattern createIndexPattern(BasePattern* pattern, int index)
+        {
+            IndexPattern ip;
+            ip.data = pattern;
+            ip.index = index;
+            return ip;
+        }
+        void addPattern(BasePattern* pattern, std::list<IndexPattern> &datas, int& index)
+        {
+            datas.push_back(createIndexPattern(pattern, index));
+            index++;
+        }
+        void IPreMessage::Init(const UTF8* pattern, const UTF8* logName)
+        {
+            const UTF8* p = pattern;
+            const UTF8* pre = p;
+            const UTF8* l;
+            int i = 0;
             while (*p != 0)
             {
                 if (*((p)++) == '@')
                 {
                     l = this->getDataType(p);
-                    if (equels(l, "d", 1))
+                    if (equalsCaseInsensitive(l, "d", 1))
                     {
-                        add = new DateTimePattern();
-                        datas.push_back(add);
-                        nDatas.push_back(add);
+                        addPattern(new DateTimePattern(), nDatas, i);
                     }
-                    else if (equels(l, "pid", 3))
+                    else if (equalsCaseInsensitive(l, "pid", 3))
                     {
-                        add = new ProcessDataPattern();
-                        datas.push_back(add);
-                        nDatas.push_back(add);
+                        addPattern(new ProcessDataPattern(), nDatas, i);
                     }
-                    else if (equels(l, "msg", 3))
+                    else if (equalsCaseInsensitive(l, "msg", 3))
                     {
-                        add = new MsgPattern();
-                        datas.push_back(add);
-                        unDatas.push_back(add);
+                        addPattern(new MsgPattern(), unDatas, i);
                     }
-                    else if (equels(l, "tid", 3))
+                    else if (equalsCaseInsensitive(l, "tid", 3))
                     {
-                        add = new ThreadIdPattern();
-                        datas.push_back(add);
-                        nDatas.push_back(add);
+                        addPattern(new ThreadIdPattern(), nDatas, i);
                     }
-                    else if (equels(l, "lname", 5))
+                    else if (equalsCaseInsensitive(l, "lname", 5))
                     {
-                        add = new LoggerNamePattern(String(logName));
-                        datas.push_back(add);
-                        unDatas.push_back(add);
+                        addPattern(new LoggerNamePattern(String(logName)), unDatas, i);
                     }
-                    else if (equels(l, "pname", 5))
+                    else if (equalsCaseInsensitive(l, "pname", 5))
                     {
-                        add = new ProcessNamePattern();
-                        datas.push_back(add);
-                        nDatas.push_back(add);
+                        addPattern(new ProcessNamePattern(), nDatas, i);
                     }
-                    else if (equels(l, "llevel", 6))
+                    else if (equalsCaseInsensitive(l, "llevel", 6))
                     {
-                        add = new LogLevelPattern();
-                        datas.push_back(add);
-                        unDatas.push_back(add);
+                        addPattern(new LogLevelPattern(), unDatas, i);
                     }
                     else
                     {
@@ -84,34 +113,6 @@ namespace Sys
                     pre = p;
                 }
             }
-            for (const auto & pat : datas)
-            {
-                pat->setPattern(&datas);
-                pat->prepeareLogger();
-            }
-            delete[] patterns;
-        }
-        std::list<IData*>* IPreMessage::getDatas() const
-        {
-            std::list<IData*> *datas = new std::list<IData*>();
-            auto sc = this->datas.cbegin(), ec = this->datas.cend();
-            while (sc != ec)
-            {
-                datas->push_back((*sc)->getPattern());
-                sc++;
-            }
-            return datas;
-        }
-        std::list<IData*> IPreMessage::getNecessaryData() const
-        {
-            std::list<IData*> datas;
-            auto sc = this->nDatas.cbegin(), ec = this->nDatas.cend();
-            while (sc != ec)
-            {
-                datas.push_back((*sc)->getPattern());
-                sc++;
-            }
-            return datas;
         }
         UTF8 * IPreMessage::getDataType(const UTF8 * p)
         {

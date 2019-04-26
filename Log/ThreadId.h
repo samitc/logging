@@ -12,7 +12,6 @@ namespace Sys
         public:
             ThreadId();
             UTF8 * getData(const UTF8 * pattern) const override;
-            int getNumber() const override;
         protected:
             size_t id;
         };

@@ -13,7 +13,7 @@ namespace Sys
         public:
             LogStatement(const PreMessage *preMessage, const char *msg, const String&);
             virtual ~LogStatement();
-            virtual String getMessage(const std::list<IData*>&) const;
+            virtual String getMessage(const IndexData* nData, int nSize) const;
         private:
             String level;
             char *message;

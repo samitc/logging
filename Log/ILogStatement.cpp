@@ -8,17 +8,10 @@ namespace Sys
         ILogStatement::ILogStatement(const IPreMessage *preMessage)
         {
             this->msg = preMessage;
-            this->datas = preMessage->getDatas();
         }
-        ILogStatement::~ILogStatement()
+        const IPreMessage* ILogStatement::getMsg() const
         {
-            auto s = this->datas->begin(), e = this->datas->end();
-            while (s != e)
-            {
-                delete(*s);
-                s++;
-            }
-            delete this->datas;
+            return msg;
         }
     }
 }

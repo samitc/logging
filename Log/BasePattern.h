@@ -12,10 +12,6 @@ namespace Sys
             BasePattern() = default;
             virtual ~BasePattern() = default;
             virtual IData* getPattern() const = 0;
-            virtual void prepeareLogger();
-            void setPattern(const std::list<BasePattern*>* patt);
-        protected:
-            const std::list<BasePattern*>* patterns;
         };
     }
 }

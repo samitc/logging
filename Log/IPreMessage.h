@@ -9,18 +9,29 @@ namespace Sys
     {
         class IData;
         class BasePattern;
+        struct IndexData
+        {
+            int index;
+            IData* data;
+        };
+        struct IndexPattern
+        {
+            int index;
+            BasePattern* data;
+        };
         class IPreMessage
         {
         public:
             IPreMessage(const UTF8 * patterns, const UTF8* logName);
             ~IPreMessage();
-            std::list<IData*>* getDatas() const;
-            std::list<IData*> getNecessaryData() const;
+            int getNumOfNecessaryData() const;
+            int getNumOfUnNecessaryData() const;
+            void getNecessaryData(IndexData* datasArray) const;
+            void getUnNecessaryData(IndexData* datasArray) const;
         protected:
             UTF8 * patteren;
-            std::list<BasePattern*> datas;
-            std::list<BasePattern*> nDatas;
-            std::list<BasePattern*> unDatas;
+            std::list<IndexPattern> nDatas;
+            std::list<IndexPattern> unDatas;
         private:
             void Init(const UTF8 * patterns, const UTF8* logName);
             UTF8 * getDataType(const UTF8 * p);

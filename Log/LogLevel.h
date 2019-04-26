@@ -9,10 +9,10 @@ namespace Sys
         class LogLevel :public IData
         {
         public:
+            static UTF8* levelStr;
             LogLevel() = default;
             ~LogLevel() = default;
             virtual UTF8 * getData(const UTF8 * pattern) const;
-            int getNumber() const override;
         private:
 
         };

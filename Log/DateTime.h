@@ -14,7 +14,6 @@ namespace Sys
             DateTime();
             virtual ~DateTime();
             virtual UTF8 * getData(const UTF8 * pattern) const;
-            int getNumber() const override;
         protected:
             std::chrono::time_point<std::chrono::system_clock> time;
         };

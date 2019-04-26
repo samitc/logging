@@ -5,14 +5,19 @@ namespace Sys
 {
     namespace Logging
     {
+        char toLower(char p)
+        {
+            return p | 0x20;
+        }
+        char toUpper(char p)
+        {
+            return p & 0xDF;
+        }
         void stringToLower(char *p)
         {
             while (*p != 0)
             {
-                if (*p >= 0x41 && *p <= 0x5A)
-                {
-                    (*p) |= 0x20;
-                }
+                *p = toLower(*p);
                 p++;
             }
         }
@@ -20,18 +25,15 @@ namespace Sys
         {
             while (*p != 0)
             {
-                if (*p >= 0x61 && *p <= 0x7A)
-                {
-                    (*p) &= 0xDF;
-                }
+                *p = toUpper(*p);
                 p++;
             }
         }
-        bool equels(const UTF8 * strA, const UTF8 * strB, int count)
+        bool equalsCaseInsensitive(const UTF8* strA, const UTF8* strB, int count)
         {
             while (count > 0 && (*strA) != 0 && (*strB) != 0)
             {
-                if (*strA != *strB)
+                if (toLower(*strA) != toLower(*strB))
                 {
                     return false;
                 }

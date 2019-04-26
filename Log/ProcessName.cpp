@@ -10,7 +10,7 @@ namespace Sys
 {
     namespace Logging
     {
-        Sys::Logging::ProcessName::ProcessName()
+        void getProcessName(char* name,int BUFFER_SIZE)
         {
 #if defined(WINDOWS)
             DWORD ID = GetCurrentProcessId();
@@ -24,7 +24,7 @@ namespace Sys
             const int SIZE_OF_BUFFER = 1024 + 1;
             char programName[SIZE_OF_BUFFER];
             fileName.getline(programName, SIZE_OF_BUFFER);
-            char *p = programName;
+            char* p = programName;
             while (*p != ' ')
             {
                 ++p;
@@ -35,6 +35,10 @@ namespace Sys
             }
             strcpy(name, p);
 #endif
+        }
+        Sys::Logging::ProcessName::ProcessName()
+        {
+            getProcessName(name, BUFFER_SIZE);
         }
         UTF8 * ProcessName::getData(const UTF8 * pattern) const
         {
@@ -50,10 +54,6 @@ namespace Sys
             }
             ++start;
             return createStr(start);
-        }
-        int ProcessName::getNumber() const
-        {
-            return 1;
         }
     }
 }

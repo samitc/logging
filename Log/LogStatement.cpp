@@ -2,6 +2,8 @@
 #include "IData.h"
 #include "PreMessage.h"
 #include "CharUtilities.h"
+#include "Msg.h"
+#include "LogLevel.h"
 namespace Sys
 {
     namespace Logging
@@ -9,7 +11,7 @@ namespace Sys
 #define MAX_LOG_SIZE    4096
 #define MESSAGE_ID      0
 #define LEVEL_ID        4
-        static char *addSpecialStr(char *str, int msgIndex, const char *msg, int levelIndex, const char *level)
+        static char* addSpecialStr(char* str, int msgIndex, const char* msg, int levelIndex, const char* level)
         {
             ReplaceData datas[2];
             ReplaceData msgData;
@@ -34,14 +36,14 @@ namespace Sys
             }
             else
             {
-                datas[0]=msgData;
+                datas[0] = msgData;
                 datas[1].strToPut = level;
                 datas[1].pos = levelIndex;
                 datas[1].charToDelete = 0;
             }
             return replace(str, datas, count);
         }
-        LogStatement::LogStatement(const PreMessage *preMessage, const char* msg, const String& level) :ILogStatement(preMessage), level(level)
+        LogStatement::LogStatement(const PreMessage* preMessage, const char* msg, const String& level) :ILogStatement(preMessage), level(level)
         {
             register int l = strlen(msg) + 1;
             this->message = new char[l];
@@ -51,71 +53,79 @@ namespace Sys
         {
             delete[] this->message;
         }
-        String LogStatement::getMessage(const std::list<IData*>& datas) const
+        String LogStatement::getMessage(const IndexData* nData, int nSize) const
         {
             UTF8 finalStr[MAX_LOG_SIZE];
             UTF8* fP = finalStr;
             *fP = 0;
-            char* nonPat = ((PreMessage*)(this->msg))->getNonPatteren();
+            char* nonPat = ((PreMessage*)(this->getMsg()))->getNonPatteren();
             char* nPat = nonPat;
-            auto s = this->datas->begin(), e = this->datas->end();
-            auto ds = datas.cbegin(), de = datas.cend();
+            int sizeOfUnData = getMsg()->getNumOfUnNecessaryData();
+            IndexData* unData = (IndexData*)alloca(sizeOfUnData * sizeof(IndexData));
+            getMsg()->getUnNecessaryData(unData);
             int curStrIndex = 0;
-            int index = 0;
+            int nIndex = 0;
+            int unIndex = 0;
             int countl = 3;
             int messageIndex = -1;
             int levelIndex = -1;
-            while (s != e)
+            while (nIndex < nSize || unIndex < sizeOfUnData)
             {
                 IData* dat;
-                if (ds != de && (*s)->getNumber() == (*ds)->getNumber())
+                int index;
+                if (nIndex == nSize)
                 {
-                    dat = *ds;
-                    ++ds;
+                    dat = unData[unIndex].data;
+                    index = unData[unIndex].index;
+                    unIndex++;
+                }
+                else if (unIndex == sizeOfUnData)
+                {
+                    dat = nData[nIndex].data;
+                    index = nData[nIndex].index;
+                    nIndex++;
+                }
+                else if (unData[unIndex].index < nData[nIndex].index)
+                {
+                    dat = unData[unIndex].data;
+                    index = unData[unIndex].index;
+                    unIndex++;
                 }
                 else
                 {
-                    dat = *s;
+                    dat = nData[nIndex].data;
+                    index = nData[nIndex].index;
+                    nIndex++;
                 }
-                ++s;
-                int nonPatIndex = ((PreMessage*)(this->msg))->getIndexInNonPatteren(index);
+                int nonPatIndex = ((PreMessage*)(this->getMsg()))->getIndexInNonPatteren(index);
                 if (curStrIndex < nonPatIndex)
                 {
-                    strcat(fP,nPat,nonPatIndex - curStrIndex);
+                    strcat(fP, nPat, nonPatIndex - curStrIndex);
                     fP += nonPatIndex - curStrIndex;
                     nPat += nonPatIndex - curStrIndex;
                     curStrIndex = nonPatIndex;
                 }
-                if (dat->getNumber() == MESSAGE_ID)
+                UTF8* t = dat->getData(((PreMessage*)(this->getMsg()))->getPaterenAt(index));
+                if (!strcmp(t, Msg::msgStr))
                 {
-                    messageIndex = fP - finalStr;
-                    index++;
-                    continue;
+                    strcat(fP, message);
+                    fP += strlen(message);
                 }
-                else if (dat->getNumber() == LEVEL_ID)
+                else if (!strcmp(t, LogLevel::levelStr))
                 {
-                    levelIndex = fP - finalStr;
-                    index++;
-                    continue;
+                    strcat(fP, level.c_str());
+                    fP += level.size();
                 }
-                char * t = dat->getData(((PreMessage*)(this->msg))->getPaterenAt(index));
-                strcat(fP,t);
-                fP += strlen(t);
-                delete []t;
+                else
+                {
+                    strcat(fP, t);
+                    fP += strlen(t);
+                    delete[]t;
+                }
                 index++;
             }
             strcat(fP, nonPat + curStrIndex);
-            String r;
-            if (messageIndex == -1 && levelIndex == -1)
-            {
-                r.append(finalStr);
-            }
-            else
-            {
-                char *ret = addSpecialStr(finalStr, messageIndex, message, levelIndex, level.c_str());
-                r.append(ret);
-                delete[]ret;
-            }
+            String r(finalStr);
             r.append("\n");
             return r;
         }
