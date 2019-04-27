@@ -33,12 +33,8 @@ namespace Sys
         int formatToString(UTF8 *str, const int value, const int count);
         int countLetter(const UTF8 * str, const char l);
         DateTimeWrapper getTimeFromNow(const std::chrono::time_point<std::chrono::system_clock> &currentTime);
-        DateTime::DateTime() :time(std::chrono::system_clock::now())
+        DateTime::DateTime() :time(std::chrono::system_clock::now()), date()
         {
-        }
-        DateTime::~DateTime()
-        {
-            delete[]date;
         }
 #define CREATE_PATTERN_CASE(letter,func)\
         case letter:\
@@ -79,13 +75,12 @@ namespace Sys
                 curIndex++;
             }
             l++;
-            date = new UTF8[l];
-            date[0] = 0;
+            date = TString<50>(l);
             for (int i = 0; i < curIndex; i++)
             {
-                strcat(date, temp + (i * (patternL * sizeof(UTF8) + 1)));
+                date.append(temp + (i * (patternL * sizeof(UTF8) + 1)));
             }
-            return date;
+            return date.c_str();
         }
         int countLetter(const UTF8 * str, const char l)
         {

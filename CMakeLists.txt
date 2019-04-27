@@ -21,7 +21,8 @@ set(COMMON_SOURCE
         Log/PreMessage.cpp
         Log/ProcessLog.cpp
         Log/XmlLogger.cpp
-		Log/LString.cpp)
+		Log/LString.cpp
+		Log/TString.cpp)
 set(TEST_SOURCE
         LogTesting/PerformanceTest.cpp
         LogTesting/PerformanceTest.h

@@ -9,6 +9,7 @@ namespace Sys
         {
         public:
             explicit String();
+            explicit String(unsigned int capacity);
             explicit String(const UTF8* str);
             explicit String(UTF8* str, unsigned int len);
             String(const String&);
@@ -33,6 +34,7 @@ namespace Sys
             UTF8 cacheStr[CACHE_STR_SIZE];
             UTF8 * str;
             unsigned int sizeM;
+            unsigned int capacity;
         };
     }
 }

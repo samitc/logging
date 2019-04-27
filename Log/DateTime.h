@@ -3,6 +3,7 @@
 #include "IData.h"
 #include <chrono>
 #include <list>
+#include "TString.h"
 namespace Sys
 {
     namespace Logging
@@ -12,12 +13,12 @@ namespace Sys
         {
         public:
             DateTime();
-            virtual ~DateTime();
+            ~DateTime() = default;
             const UTF8 * getData(const UTF8 * pattern) const;
         protected:
             std::chrono::time_point<std::chrono::system_clock> time;
         private:
-            mutable UTF8* date;
+            mutable TString<50> date;
         };
     }
 }
