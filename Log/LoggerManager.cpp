@@ -183,7 +183,7 @@ namespace Sys
                 while (!oData.isEmpty())
                 {
                     LogOutput *logOutput = oData.dequeue();
-                    outputProcess.outputLog(*logOutput);
+                    outputProcess.outputLog(std::move(*logOutput));
                     delete logOutput;
                     --numberOfWaitingLogs;
                 }

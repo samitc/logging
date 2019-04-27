@@ -32,7 +32,7 @@ namespace Sys
         public:
             explicit OutputProcess();
             ~OutputProcess();
-            void outputLog(const LogOutput &) const;
+            void outputLog(LogOutput &&) const;
         private:
             void printAllData() const;
             mutable std::set<LogOutput> data;

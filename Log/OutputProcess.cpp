@@ -17,7 +17,7 @@ namespace Sys
         {
             printAllData();
         }
-        void OutputProcess::outputLog(const LogOutput &logOutput) const
+        void OutputProcess::outputLog(LogOutput&& logOutput) const
         {
             if (logOutput.shouldWriteInstantly)
             {
@@ -25,7 +25,7 @@ namespace Sys
             }
             else
             {
-                data.insert(logOutput);
+                data.insert(std::move(logOutput));
                 printAllData();
             }
         }
@@ -39,16 +39,16 @@ namespace Sys
                 curPrinted++;
             }
         }
-        void writeToOutput(const LogOutput &msg)
+        void writeToOutput(const LogOutput& msg)
         {
             Configuration* config = msg.config;
             config->getLoggerWriter()->write(msg.msg.c_str());
         }
-        LogOutput::LogOutput(const LogOutput &copy) :LogOutput(copy.config, String(copy.msg), copy.shouldWriteInstantly, copy.logNumber)
+        LogOutput::LogOutput(const LogOutput& copy) :LogOutput(copy.config, String(copy.msg), copy.shouldWriteInstantly, copy.logNumber)
         {
             config->addRef();
         }
-        LogOutput::LogOutput(Configuration * config, String&& msg, bool shouldWriteInstantly, uint64_t logNumber) : msg(msg), config(config), logNumber(logNumber), shouldWriteInstantly(shouldWriteInstantly)
+        LogOutput::LogOutput(Configuration* config, String&& msg, bool shouldWriteInstantly, uint64_t logNumber) : msg(msg), config(config), logNumber(logNumber), shouldWriteInstantly(shouldWriteInstantly)
         {
         }
         LogOutput::LogOutput(LogOutput&& o) : LogOutput(o.config, std::move(o.msg), o.shouldWriteInstantly, o.logNumber)
@@ -58,7 +58,10 @@ namespace Sys
         }
         LogOutput::~LogOutput()
         {
-            config->removeRef();
+            if (config != nullptr)
+            {
+                config->removeRef();
+            }
         }
     }
 }
