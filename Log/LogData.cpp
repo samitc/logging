@@ -7,7 +7,7 @@ namespace Sys
     namespace Logging
     {
         LogData::LogData(Configuration* config, const UTF8* msg, const UTF8* level, const UTF8* name, bool writeImmediately, uint64_t logNumber) :
-            config(config), sizeOfDatas(0), msg(createStr(msg)), level(level), name(name), shouldWriteInstantly(writeImmediately), logNumber(logNumber)
+            config(config), sizeOfDatas(0),msg(msg), level(level), name(name), shouldWriteInstantly(writeImmediately), logNumber(logNumber)
         {
             sizeOfDatas = config->getSysData()->getNumOfNecessaryData();
             if (sizeOfDatas > LogData::MAX_DATAS)

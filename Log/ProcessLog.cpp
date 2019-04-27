@@ -9,21 +9,21 @@ namespace Sys
 {
     namespace Logging
     {
-        UTF8* ProcessLog::processLog(const LogData& ld) const
+        bool ProcessLog::processLog(const LogData& ld, String& res) const
         {
             Configuration* config = ld.getConfig();
             if (config->startUsingFilter().filter(String(ld.getMsg())))
             {
                 config->endUsingFilter();
                 LogStatement ls = LogStatement(config->getSysData(), ld.getMsg(), ld.getLevel());
-                String str = ls.getMessage(ld.getDatas(), ld.getDatasSize());
-                str += ld.getName();
-                return createStr(str.c_str());
+                res = ls.getMessage(ld.getDatas(), ld.getDatasSize());
+                res += ld.getName();
+                return true;
             }
             else
             {
                 config->endUsingFilter();
-                return nullptr;
+                return false;
             }
         }
     }

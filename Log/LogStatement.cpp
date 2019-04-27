@@ -11,15 +11,8 @@ namespace Sys
 #define MAX_LOG_SIZE    4096
 #define MESSAGE_ID      0
 #define LEVEL_ID        4
-        LogStatement::LogStatement(const PreMessage* preMessage, const char* msg, const String& level) :ILogStatement(preMessage), level(level)
+        LogStatement::LogStatement(const PreMessage* preMessage, const char* msg, const String& level) :ILogStatement(preMessage), level(level),message(msg)
         {
-            register int l = strlen(msg) + 1;
-            this->message = new char[l];
-            strcpy(this->message, msg);
-        }
-        LogStatement::~LogStatement()
-        {
-            delete[] this->message;
         }
         String LogStatement::getMessage(const IndexData* nData, int nSize) const
         {
@@ -94,9 +87,10 @@ namespace Sys
                 }
             }
             strcat(fP, nonPat + curStrIndex);
-            String r(finalStr);
-            r.append("\n");
-            return r;
+            fP += strlen(fP);
+            *fP = '\n';
+            *(++fP) = 0;
+            return String(finalStr);
         }
     }
 }

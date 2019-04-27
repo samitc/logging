@@ -8,6 +8,7 @@ namespace Sys
     namespace Logging
     {
         class LogData;
+        class String;
         enum class ConcurrencyLevel;
         class ProcessLog
         {
@@ -15,7 +16,7 @@ namespace Sys
             ProcessLog() = default;
             ProcessLog(const ProcessLog&) = default;
             ~ProcessLog() = default;
-            UTF8* processLog(const LogData &) const;
+            bool processLog(const LogData &,String &) const;
         private:
         };
     }

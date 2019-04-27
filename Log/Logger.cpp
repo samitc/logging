@@ -29,7 +29,7 @@ namespace Sys
                 {
                     return !strcmp(sLevel, str.c_str());
                 }) != config->getImmLevels().cend();
-                loggerManager.log(config, sLevel, msg, name, writeIm);
+                loggerManager.log(config, sLevel, createStr(msg), name, writeIm);
             }
         }
         void Logger::log(unsigned short level, const UTF8 * msg) const

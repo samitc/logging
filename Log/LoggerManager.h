@@ -24,7 +24,7 @@ namespace Sys
             void log(Configuration *config, const UTF8 *level, const std::function<UTF8*()>&, const UTF8 *name, bool writeImmediately) const;
         private:
             void printAllToOutput();
-            void addToOutput(const LogData*) const;
+            void addToOutput(LogData*) const;
             void printerWorker();
             void processWorker();
             void log(LogData* logData) const;

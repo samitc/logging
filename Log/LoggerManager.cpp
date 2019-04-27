@@ -79,13 +79,14 @@ namespace Sys
                                                      }) == config->getImmLevels().cend());
             log(new LogData(config, msg, level, name, isWriteImmediately, logNumber++));
         }
-        void LoggerManager::addToOutput(const LogData *logData) const
+        void LoggerManager::addToOutput(LogData *logData) const
         {
-            UTF8 *msg = processLog.processLog(*logData);
-            if (msg)
+            String msg;
+            bool passToOutput = processLog.processLog(*logData, msg);
+            if (passToOutput)
             {
                 oData.enqueue(new LogOutput(logData->getConfig(),
-                                            msg,
+                                            std::move(msg),
                                             logData->getWriteImmediately(),
                                             logData->getLogNumber()));
             }
@@ -128,13 +129,14 @@ namespace Sys
         {
             if (!workerThreads.size())
             {
-                UTF8 *msg = processLog.processLog(*logData);
-                if (msg)
+                String msg;
+                bool passToOutput = processLog.processLog(*logData,msg);
+                if (passToOutput)
                 {
                     outputProcess.outputLog(LogOutput(logData->getConfig(),
-                                                      msg,
-                                                      logData->getWriteImmediately(),
-                                                      logData->getLogNumber()));
+                        std::move(msg),
+                        logData->getWriteImmediately(),
+                        logData->getLogNumber()));
                 }
                 else
                 {

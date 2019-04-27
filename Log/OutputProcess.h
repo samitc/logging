@@ -3,6 +3,7 @@
 #include <set>
 #include <stdint.h>
 #include "GlobalDefinitions.h"
+#include "LString.h"
 namespace Sys
 {
     namespace Logging
@@ -13,11 +14,11 @@ namespace Sys
         {
             LogOutput() = delete;
             LogOutput(const LogOutput&);
-            LogOutput(Configuration* config, const UTF8* msg, bool shouldWriteInstantly, uint64_t logNumber);
+            LogOutput(Configuration* config, String &&msg, bool shouldWriteInstantly, uint64_t logNumber);
             LogOutput(LogOutput&&);
             ~LogOutput();
             Configuration* config;
-            const UTF8* msg;
+            String msg;
             bool shouldWriteInstantly;
             uint64_t logNumber;
             bool operator<(const LogOutput &o) const

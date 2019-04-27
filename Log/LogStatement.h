@@ -12,11 +12,11 @@ namespace Sys
         {
         public:
             LogStatement(const PreMessage *preMessage, const char *msg, const String&);
-            virtual ~LogStatement();
+            ~LogStatement() = default;
             virtual String getMessage(const IndexData* nData, int nSize) const;
         private:
-            String level;
-            char *message;
+            const String &level;
+            const char *message;
         };
     }
 }
