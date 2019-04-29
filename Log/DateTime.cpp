@@ -66,6 +66,7 @@ namespace Sys
                     CREATE_PATTERN_CASE('s',time.getSecond());
                     CREATE_PATTERN_CASE('l',time.getMillisecond());
                 default:
+                    date.append(*pattern);
                     curTempLocation[0] = *pattern;
                     curTempLocation[1] = 0;
                     pattern++;

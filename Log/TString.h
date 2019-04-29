@@ -16,6 +16,7 @@ namespace Sys
             TString(TString<CACHE_SIZE>&&);
             ~TString();
             const UTF8* c_str() const;
+            TString<CACHE_SIZE>& append(const UTF8 str);
             TString<CACHE_SIZE>& append(const UTF8* str);
             unsigned int size() const;
             bool empty() const;
@@ -25,6 +26,7 @@ namespace Sys
             bool operator<(const TString<CACHE_SIZE>&) const;
             TString<CACHE_SIZE>& operator=(const UTF8*);
             TString<CACHE_SIZE>& operator=(const TString<CACHE_SIZE>&);
+            TString<CACHE_SIZE>& operator=(TString<CACHE_SIZE>&&);
             TString<CACHE_SIZE>& operator+=(const UTF8*);
             TString<CACHE_SIZE>& operator+=(const TString<CACHE_SIZE>&);
         private:

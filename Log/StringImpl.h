@@ -51,6 +51,29 @@ TEMPLATE_PREFIX void CLASS_DEFENITION::createFromString(const UTF8* str)
     }
     strcpy(this->str, str);
 }
+TEMPLATE_PREFIX CLASS_DEFENITION& CLASS_DEFENITION::append(const UTF8 str)
+{
+    if (empty())
+    {
+        sizeM = 2;
+        this->str = cacheStr;
+    }
+    else
+    {
+        sizeM++;
+        if (sizeM > CLASS_STR_CACHE_SIZE && sizeM > capacity)
+        {
+            capacity = sizeM;
+            UTF8* newStr = new UTF8[sizeM];
+            strcpy(newStr, this->str);
+            deleteString();
+            this->str = newStr;
+        }
+    }
+    this->str[size() - 1] = str;
+    this->str[size()] = 0;
+    return *this;
+}
 TEMPLATE_PREFIX CLASS_DEFENITION& CLASS_DEFENITION::append(const UTF8* str)
 {
     if (str != nullptr)
@@ -118,6 +141,22 @@ TEMPLATE_PREFIX CLASS_DEFENITION & CLASS_DEFENITION::operator=(const UTF8 *o)
 TEMPLATE_PREFIX CLASS_DEFENITION & CLASS_DEFENITION::operator=(const CLASS_NAME &o)
 {
     *this = o.c_str();
+    return *this;
+}
+TEMPLATE_PREFIX CLASS_DEFENITION& CLASS_DEFENITION::operator=(CLASS_NAME&& o)
+{
+    if (o.str != o.cacheStr)
+    {
+        str = o.str;
+        capacity = o.capacity;
+        sizeM = o.sizeM;
+        o.str = nullptr;
+    }
+    else
+    {
+        this->str = cacheStr;
+        strcpy(this->str, o.str);
+    }
     return *this;
 }
 TEMPLATE_PREFIX CLASS_DEFENITION & CLASS_DEFENITION::operator+=(const UTF8 *o)

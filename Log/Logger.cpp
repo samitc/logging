@@ -62,10 +62,8 @@ namespace Sys
                     }
                     return false;
                 });
-                lv = createStr(lv);
-                config->removeRef();
                 this->log(lv, msg);
-                delete[] lv;
+                config->removeRef();
             }
         }
         void Logger::log(const UTF8* level, const UTF8* msg) const

@@ -48,7 +48,7 @@ namespace Sys
         {
             config->addRef();
         }
-        LogOutput::LogOutput(Configuration* config, String&& msg, bool shouldWriteInstantly, uint64_t logNumber) : msg(msg), config(config), logNumber(logNumber), shouldWriteInstantly(shouldWriteInstantly)
+        LogOutput::LogOutput(Configuration* config, String&& msg, bool shouldWriteInstantly, uint64_t logNumber) : msg(std::move(msg)), config(config), logNumber(logNumber), shouldWriteInstantly(shouldWriteInstantly)
         {
         }
         LogOutput::LogOutput(LogOutput&& o) : LogOutput(o.config, std::move(o.msg), o.shouldWriteInstantly, o.logNumber)

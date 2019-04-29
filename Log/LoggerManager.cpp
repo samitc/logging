@@ -77,7 +77,7 @@ namespace Sys
                                                      [level](const String &str) {
                                                          return !strcmp(level, str.c_str());
                                                      }) == config->getImmLevels().cend());
-            log(new LogData(config, msg, level, name, isWriteImmediately, logNumber++));
+            log(LogData(config, msg, level, name, isWriteImmediately, logNumber++));
         }
         void LoggerManager::addToOutput(LogData *logData) const
         {
@@ -125,30 +125,29 @@ namespace Sys
                 }
             } while (!isExit && data != nullptr);
         }
-        void Sys::Logging::LoggerManager::log(LogData *logData) const
+        void Sys::Logging::LoggerManager::log(LogData& logData) const
         {
             if (!workerThreads.size())
             {
                 String msg;
-                bool passToOutput = processLog.processLog(*logData,msg);
+                bool passToOutput = processLog.processLog(logData, msg);
                 if (passToOutput)
                 {
-                    outputProcess.outputLog(LogOutput(logData->getConfig(),
+                    outputProcess.outputLog(LogOutput(logData.getConfig(),
                         std::move(msg),
-                        logData->getWriteImmediately(),
-                        logData->getLogNumber()));
+                        logData.getWriteImmediately(),
+                        logData.getLogNumber()));
                 }
                 else
                 {
-                    logData->getConfig()->removeRef();
+                    logData.getConfig()->removeRef();
                 }
-                delete logData;
             }
             else
             {
-                while (numberOfWaitingLogs > logData->getConfig()->getMaxWaitingLogs())
+                while (numberOfWaitingLogs > logData.getConfig()->getMaxWaitingLogs())
                 {
-                    LogData *data;
+                    LogData* data;
                     data = this->pData.dequeue();
                     if (data)
                     {
@@ -157,14 +156,15 @@ namespace Sys
                     }
                 }
                 ++numberOfWaitingLogs;
-                if (logData->getWriteImmediately())
+                LogData* pLogData = new LogData(std::move(logData));
+                if (logData.getWriteImmediately())
                 {
-                    ipData.enqueue(logData);
+                    ipData.enqueue(pLogData);
                     pData.enqueue(nullptr);// to wake up worker thread
                 }
                 else
                 {
-                    pData.enqueue(logData);
+                    pData.enqueue(pLogData);
                 }
             }
         }

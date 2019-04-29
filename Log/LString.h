@@ -16,6 +16,7 @@ namespace Sys
             String(String&&);
             ~String();
             const UTF8* c_str() const;
+            String& append(const UTF8 str);
             String& append(const UTF8* str);
             unsigned int size() const;
             bool empty() const;
@@ -25,6 +26,7 @@ namespace Sys
             bool operator<(const String&) const;
             String& operator=(const UTF8*);
             String& operator=(const String&);
+            String& operator=(String&&);
             String& operator+=(const UTF8*);
             String& operator+=(const String&);
         private:

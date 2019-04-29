@@ -18,7 +18,7 @@ namespace Sys
             LogData(Configuration* config, const UTF8* msg, const UTF8* level, const UTF8* name, bool writeImmediately, uint64_t logNumber);
             explicit LogData(const UTF8* msg);
             LogData(const LogData&) = delete;
-            LogData(LogData&&) = delete;
+            LogData(LogData&&);
             LogData& operator=(const LogData&) = delete;
             LogData& operator=(LogData&&) = delete;
             ~LogData();
