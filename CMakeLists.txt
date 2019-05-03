@@ -33,7 +33,9 @@ set(TEST_SOURCE
         LogTesting/LoggerTest.cpp
         LogTesting/LoggerListener.h
         LogTesting/LoggerListener.cpp
-        LogTesting/DateTimeTest.cpp)
+        LogTesting/DateTimeTest.cpp
+        LogTesting/LoggerManagerTest.cpp
+        LogTesting/NetworkWriterMock.cpp)
 SET(PATTERN_SOURCE
         Log/DateTimePattern.cpp
         Log/ThreadIdPattern.cpp

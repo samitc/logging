@@ -154,6 +154,10 @@ namespace Sys
                         addToOutput(data);
                         delete data;
                     }
+                    else
+                    {
+                        printAllToOutput();
+                    }
                 }
                 ++numberOfWaitingLogs;
                 LogData* pLogData = new LogData(std::move(logData));
@@ -176,7 +180,7 @@ namespace Sys
         {
             this->log(config, level, msg(), name, writeImmediately);
         }
-        void LoggerManager::printAllToOutput()
+        void LoggerManager::printAllToOutput() const
         {
             if (!oData.isEmpty() && !isOutputRun.test_and_set())
             {

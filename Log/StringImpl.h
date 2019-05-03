@@ -145,11 +145,11 @@ TEMPLATE_PREFIX CLASS_DEFENITION & CLASS_DEFENITION::operator=(const CLASS_NAME 
 }
 TEMPLATE_PREFIX CLASS_DEFENITION& CLASS_DEFENITION::operator=(CLASS_NAME&& o)
 {
+    sizeM = o.sizeM;
     if (o.str != o.cacheStr)
     {
         str = o.str;
         capacity = o.capacity;
-        sizeM = o.sizeM;
         o.str = nullptr;
     }
     else

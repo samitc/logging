@@ -23,7 +23,7 @@ namespace Sys
             void log(Configuration *config, const UTF8 *level, const UTF8 *msg, const UTF8 *name, bool writeImmediately) const;
             void log(Configuration *config, const UTF8 *level, const std::function<UTF8*()>&, const UTF8 *name, bool writeImmediately) const;
         private:
-            void printAllToOutput();
+            void printAllToOutput() const;
             void addToOutput(LogData*) const;
             void printerWorker();
             void processWorker();
@@ -37,7 +37,7 @@ namespace Sys
             mutable Ccons::Queue<LogData> ipData;
             mutable Ccons::Queue<LogOutput> oData;
             std::vector<std::thread> workerThreads;
-            std::atomic_flag isOutputRun;
+            mutable std::atomic_flag isOutputRun;
         };
     }
 }
