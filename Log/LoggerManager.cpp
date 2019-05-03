@@ -125,7 +125,7 @@ namespace Sys
                 }
             } while (!isExit && data != nullptr);
         }
-        void Sys::Logging::LoggerManager::log(LogData& logData) const
+        void Sys::Logging::LoggerManager::log(LogData&& logData) const
         {
             if (!workerThreads.size())
             {

@@ -27,7 +27,7 @@ namespace Sys
             void addToOutput(LogData*) const;
             void printerWorker();
             void processWorker();
-            void log(LogData &logData) const;
+            void log(LogData &&logData) const;
             ProcessLog processLog;
             OutputProcess outputProcess;
             std::atomic<bool> isExit;

@@ -1,4 +1,5 @@
 #include "LogData.h"
+#include <cstring>
 #include "IData.h"
 #include "Configuration.h"
 #include "CharUtilities.h"

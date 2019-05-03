@@ -20,7 +20,7 @@ namespace LogTesting
             NetworkWriterMock nw("127.0.0.1", LOGGER_PORT, Protocol::UDP);
             {
                 LoggerManager manager(2);
-                std::atomic_bool isFinished = false;
+                std::atomic_bool isFinished(false);
                 auto timeoutThread = std::thread([&isFinished]() {
                     std::this_thread::sleep_for(std::chrono::seconds(10));
                     if (!isFinished)
@@ -40,7 +40,7 @@ namespace LogTesting
                 c->clearRemoveWriter();
                 c1->clearRemoveWriter();
                 nw.setOneWriteSleep(std::chrono::milliseconds(50));
-                std::atomic<bool> startWrite = false;
+                std::atomic<bool> startWrite(false);
                 nw.setCallbackBeforeWrite([&manager, &c, &startWrite]() {
                     startWrite = true;
                 });
