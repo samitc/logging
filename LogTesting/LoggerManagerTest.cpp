@@ -55,6 +55,7 @@ namespace LogTesting
                 c->removeRef();
                 timeoutThread.detach();
             }
+            std::this_thread::sleep_for(std::chrono::milliseconds(10));
             char* logMessage;
             expectStr;
             expectStr;
