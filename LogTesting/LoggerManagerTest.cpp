@@ -35,13 +35,13 @@ namespace LogTesting
                     std::this_thread::sleep_for(std::chrono::milliseconds(100));
                     return true;
                 });
-                Configuration* c = new Configuration(pm1, &nw, 255, std::map<String, int>(), std::vector<String>(), std::move(filter), 0);
-                Configuration* c1 = new Configuration(pm2, &nw, 255, std::map<String, int>(), std::vector<String>(), LogFilter(), 2);
+                Configuration* c = new Configuration(pm1, &nw, 255, std::map<String, int>(), std::vector<String>(), LogFilter(), 0);
+                Configuration* c1 = new Configuration(pm2, &nw, 255, std::map<String, int>(), std::vector<String>(), std::move(filter), 2);
                 c->clearRemoveWriter();
                 c1->clearRemoveWriter();
                 nw.setOneWriteSleep(std::chrono::milliseconds(50));
                 std::atomic<bool> startWrite(false);
-                nw.setCallbackBeforeWrite([&manager, &c, &startWrite]() {
+                nw.setCallbackBeforeWrite([&startWrite]() {
                     startWrite = true;
                 });
                 sendLog(c1);
