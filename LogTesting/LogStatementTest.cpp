@@ -15,8 +15,9 @@ namespace LogTesting
     TEST(LogStatementTest, testUnnecessaryDataThenNecessary)
     {
         ThreadId t;
+        String level("test_level");
         PreMessage pm("@[lname](@[llevel]).process data : @[tId].message is : @[msg]", "logname");
-        LogStatement ls(&pm, "message", String("test_level"));
+        LogStatement ls(&pm, "message", level);
         String expectedMsg = String("logname(test_level).process data : ");
         auto tData = t.getData(nullptr);
         expectedMsg.append(tData);
