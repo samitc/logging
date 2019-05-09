@@ -78,10 +78,10 @@ matrix:
          - MATRIX_EVAL="CC=gcc-8 && CXX=g++-8"
       script: 
         - cd REL64
-        - valgrind --log-file=%pvalgrind.log -v -v --tool=memcheck --child-silent-after-fork=no --track-fds=yes --time-stamp=no --xml=no --num-callers=100 --error-exitcode=1 --fullpath-after=src/ --time-stamp=yes --leak-check=full --leak-resolution=high --show-leak-kinds=all --errors-for-leak-kinds=all --leak-check-heuristics=all --undef-value-errors=yes --show-mismatched-frees=yes --suppressions=../leak.supp --error-exitcode=2 ./logTesting ; (($? != 2)) && true
+        - valgrind --log-file=%pvalgrind.log -v -v --tool=memcheck --child-silent-after-fork=no --track-fds=yes --time-stamp=no --xml=no --num-callers=100 --error-exitcode=1 --fullpath-after=src/ --time-stamp=yes --leak-check=full --leak-resolution=high --show-leak-kinds=all --errors-for-leak-kinds=all --leak-check-heuristics=all --undef-value-errors=yes --show-mismatched-frees=yes --suppressions=../leak.supp --error-exitcode=2 ./logTesting --gtest_filter=-LoggerManagerTest.testSlowPrinterBug ; (($? != 2)) && true
         - cd ..
         - cd DEB64
-        - valgrind --log-file=%pvalgrind.log -v -v --tool=memcheck --child-silent-after-fork=no --track-fds=yes --time-stamp=no --xml=no --num-callers=100 --error-exitcode=1 --fullpath-after=src/ --time-stamp=yes --leak-check=full --leak-resolution=high --show-leak-kinds=all --errors-for-leak-kinds=all --leak-check-heuristics=all --undef-value-errors=yes --show-mismatched-frees=yes --suppressions=../leak.supp --error-exitcode=2 ./logTesting ; (($? != 2)) && true
+        - valgrind --log-file=%pvalgrind.log -v -v --tool=memcheck --child-silent-after-fork=no --track-fds=yes --time-stamp=no --xml=no --num-callers=100 --error-exitcode=1 --fullpath-after=src/ --time-stamp=yes --leak-check=full --leak-resolution=high --show-leak-kinds=all --errors-for-leak-kinds=all --leak-check-heuristics=all --undef-value-errors=yes --show-mismatched-frees=yes --suppressions=../leak.supp --error-exitcode=2 ./logTesting --gtest_filter=-LoggerManagerTest.testSlowPrinterBug ; (($? != 2)) && true
         - cd ..
         - find . -name '*valgrind*' -print -exec cat {} \;
     - stage: after UT
@@ -97,10 +97,10 @@ matrix:
          - MATRIX_EVAL="CC=clang-6.0 && CXX=clang++-6.0"
       script: 
         - cd REL64
-        - valgrind --log-file=%pvalgrind.log -v -v --tool=memcheck --child-silent-after-fork=no --track-fds=yes --time-stamp=no --xml=no --num-callers=100 --error-exitcode=1 --fullpath-after=src/ --time-stamp=yes --leak-check=full --leak-resolution=high --show-leak-kinds=all --errors-for-leak-kinds=all --leak-check-heuristics=all --undef-value-errors=yes --show-mismatched-frees=yes --suppressions=../leak.supp --error-exitcode=2 ./logTesting ; (($? != 2)) && true
+        - valgrind --log-file=%pvalgrind.log -v -v --tool=memcheck --child-silent-after-fork=no --track-fds=yes --time-stamp=no --xml=no --num-callers=100 --error-exitcode=1 --fullpath-after=src/ --time-stamp=yes --leak-check=full --leak-resolution=high --show-leak-kinds=all --errors-for-leak-kinds=all --leak-check-heuristics=all --undef-value-errors=yes --show-mismatched-frees=yes --suppressions=../leak.supp --error-exitcode=2 ./logTesting --gtest_filter=-LoggerManagerTest.testSlowPrinterBug ; (($? != 2)) && true
         - cd ..
         - cd DEB64
-        - valgrind --log-file=%pvalgrind.log -v -v --tool=memcheck --child-silent-after-fork=no --track-fds=yes --time-stamp=no --xml=no --num-callers=100 --error-exitcode=1 --fullpath-after=src/ --time-stamp=yes --leak-check=full --leak-resolution=high --show-leak-kinds=all --errors-for-leak-kinds=all --leak-check-heuristics=all --undef-value-errors=yes --show-mismatched-frees=yes --suppressions=../leak.supp --error-exitcode=2 ./logTesting ; (($? != 2)) && true
+        - valgrind --log-file=%pvalgrind.log -v -v --tool=memcheck --child-silent-after-fork=no --track-fds=yes --time-stamp=no --xml=no --num-callers=100 --error-exitcode=1 --fullpath-after=src/ --time-stamp=yes --leak-check=full --leak-resolution=high --show-leak-kinds=all --errors-for-leak-kinds=all --leak-check-heuristics=all --undef-value-errors=yes --show-mismatched-frees=yes --suppressions=../leak.supp --error-exitcode=2 ./logTesting --gtest_filter=-LoggerManagerTest.testSlowPrinterBug ; (($? != 2)) && true
         - cd ..
         - find . -name '*valgrind*' -print -exec cat {} \;
     - stage: after UT
