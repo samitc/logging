@@ -185,7 +185,7 @@ namespace Sys
             config->removeRef();
             return l >= level;
         }
-        void Logger::reloadConfig(const ILoggerData &logger, int loggerNumber)
+        void Logger::reloadConfig(const ILoggerData& logger, int loggerNumber)
         {
             Configuration* conf;
             bool removeWriter = true;
@@ -203,21 +203,25 @@ namespace Sys
                 {
                     levels[levelCustom.name] = levelCustom.level;
                 }
-                ILoggerWriter *writer = nullptr;
+                ILoggerWriter* writer = nullptr;
                 const auto& stream = logger.getStreams(loggerNumber);
-                if (fileName == nullptr || strcmp(fileName, stream.fileParam.fileName) != 0)
+                Configuration* curConf = config.load(std::memory_order_acquire);
+                if (curConf!=nullptr)
                 {
-                    writer = logger.getStreams(loggerNumber).getLoggerWriter();
-                    if (stream.streamType == ILoggerData::StreamType::FILE)
-                    {
-                        delete[]fileName;
-                        fileName = createStr(stream.fileParam.fileName);
-                    }
+                    curConf->addRef();
                 }
-                if (writer == nullptr&&config.load(std::memory_order_acquire) != nullptr)
+                if (curConf != nullptr && !curConf->getLoggerWriter()->compare(stream))
                 {
-                    writer = const_cast<ILoggerWriter*>(config.load(std::memory_order_acquire)->getLoggerWriter());
+                    writer = const_cast<ILoggerWriter*>(curConf->getLoggerWriter());
                     removeWriter = false;
+                }
+                else
+                {
+                    writer = const_cast<ILoggerWriter*>(stream.getLoggerWriter());
+                }
+                if (curConf!=nullptr)
+                {
+                    curConf->removeRef();
                 }
                 String lev = logger.getLevel(loggerNumber);
                 const auto& lvl = levels.find(lev);
@@ -234,9 +238,9 @@ namespace Sys
                 {
                     level = MAX_LEVEL;
                 }
-                PreMessage *p = new PreMessage(logger.getPaterens(loggerNumber).c_str(), logger.getLoggerName(loggerNumber).c_str());
+                PreMessage* p = new PreMessage(logger.getPaterens(loggerNumber).c_str(), logger.getLoggerName(loggerNumber).c_str());
                 LogFilter f = logger.getLogFilter(loggerNumber);
-                conf = new Configuration(p, writer, level, std::move(levels), std::move(immLevels), std::move(f),logger.getMaxWaitingLogs(loggerNumber));
+                conf = new Configuration(p, writer, level, std::move(levels), std::move(immLevels), std::move(f), logger.getMaxWaitingLogs(loggerNumber));
                 conf = config.exchange(conf, std::memory_order_release);
             }
             if (conf != nullptr)
@@ -270,14 +274,14 @@ namespace Sys
         Logger::Logger(const ILoggerData& logger, int loggerNumber, ConcurrencyLevel level) : Logger(logger, loggerNumber, nullptr, level)
         {
         }
-        Logger::Logger(const ILoggerData& logger, int loggerNumber, const UTF8* name, ConcurrencyLevel level) : name(createOrNull(name)), logNumber(0), config(), fileName(nullptr), loggerManager(level)
+        Logger::Logger(const ILoggerData& logger, int loggerNumber, const UTF8* name, ConcurrencyLevel level) : name(createOrNull(name)), logNumber(0), config(), loggerManager(level)
         {
             reloadConfig(logger, loggerNumber);
         }
         Logger::Logger(const ILoggerData& logger, int loggerNumber, int concurrencyLevel) : Logger(logger, loggerNumber, nullptr, concurrencyLevel)
         {
         }
-        Logger::Logger(const ILoggerData& logger, int loggerNumber, const UTF8* name, int concurrencyLevel) : name(createOrNull(name)), logNumber(0), config(), fileName(nullptr), loggerManager(concurrencyLevel)
+        Logger::Logger(const ILoggerData& logger, int loggerNumber, const UTF8* name, int concurrencyLevel) : name(createOrNull(name)), logNumber(0), config(), loggerManager(concurrencyLevel)
         {
             reloadConfig(logger, loggerNumber);
         }
@@ -294,7 +298,6 @@ namespace Sys
         Logger::~Logger()
         {
             config.load()->removeRef();
-            delete[] fileName;
         }
     }
 }

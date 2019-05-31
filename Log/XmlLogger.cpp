@@ -41,10 +41,10 @@ namespace Sys
         {
             return this->customLevels;
         }
-        ILoggerData::StreamParam XmlLogger::getStreams(int loggerNumber) const
+        StreamParam XmlLogger::getStreams(int loggerNumber) const
         {
-            ILoggerData::StreamParam ret;
-            ret.streamType = ILoggerData::StreamType::NONE;
+            StreamParam ret;
+            ret.streamType = StreamType::NONE;
             if ((int)streams[loggerNumber].streamType == 0)
             {
                 return streams[getLogNumber(indexToLoggerNames[loggerNumber].appenderName)];
@@ -55,7 +55,7 @@ namespace Sys
                 const auto& appStr = streams[getLogNumber(indexToLoggerNames[loggerNumber].appenderName)];
                 switch (ret.streamType)
                 {
-                case Sys::Logging::ILoggerData::StreamType::FILE:
+                case StreamType::FILE:
                     if (ret.fileParam.maxFiles == 0)
                     {
                         ret.fileParam.maxFiles = appStr.fileParam.maxFiles;
@@ -65,7 +65,7 @@ namespace Sys
                         ret.fileParam.fileName = createStr(appStr.fileParam.fileName);
                     }
                     break;
-                case Sys::Logging::ILoggerData::StreamType::NETWORK:
+                case StreamType::NETWORK:
                     if (ret.networkParam.port == 0)
                     {
                         ret.networkParam.port = appStr.networkParam.port;

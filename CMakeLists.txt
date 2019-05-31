@@ -6,7 +6,6 @@ set(COMMON_SOURCE
         Log/ConsoleWriter.cpp
         Log/DynamicLogger.cpp
         Log/FileWriter.cpp
-        Log/ILoggerData.cpp
         Log/ILoggerWriter.cpp
         Log/ILogStatement.cpp
         Log/IPreMessage.cpp
@@ -22,7 +21,8 @@ set(COMMON_SOURCE
         Log/ProcessLog.cpp
         Log/XmlLogger.cpp
 		Log/LString.cpp
-		Log/TString.cpp)
+		Log/TString.cpp
+        Log/StreamParams.cpp)
 set(TEST_SOURCE
         LogTesting/PerformanceTest.cpp
         LogTesting/PerformanceTest.h

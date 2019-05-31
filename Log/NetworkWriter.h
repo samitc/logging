@@ -17,7 +17,8 @@ namespace Sys
         {
         public:
             NetworkWriter(const char* addr, unsigned short port, Protocol protocol);
-            virtual void write(const char* text) const;
+            void write(const char* text) const override;
+            bool compare(const StreamParam&) const override;
             ~NetworkWriter();
         private:
 #if defined(WINDOWS)
@@ -27,6 +28,7 @@ namespace Sys
 #endif
             char* addr;
             unsigned short port;
+            Protocol protocol;
         };
     }
 }

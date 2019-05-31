@@ -8,5 +8,9 @@ namespace Sys
 		{
 			std::cout << text << std::endl;
 		}
+        bool ConsoleWriter::compare(const StreamParam&) const
+        {
+            return true;
+        }
 	}
 }

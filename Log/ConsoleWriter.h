@@ -10,6 +10,7 @@ namespace Sys
         {
         public:
             void write(const char* text) const override;
+            bool compare(const StreamParam&) const override;
         };
     }
 }

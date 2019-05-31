@@ -1,5 +1,6 @@
 #include "LoggerData.h"
 #include "LogFilter.h"
+#include "StreamParams.h"
 namespace Sys
 {
     namespace Logging
@@ -14,7 +15,7 @@ namespace Sys
         {
             return 1;
         }
-        ILoggerData::StreamParam LoggerData::getStreams(int loggerNumber) const
+        StreamParam LoggerData::getStreams(int loggerNumber) const
         {
             return param;
         }

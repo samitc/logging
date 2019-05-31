@@ -23,8 +23,8 @@ namespace LogTesting
             logData.addCustomLevel(String("debug"), 40);
             logData.setLoggerName(String("logger"));
             logData.setPatterens("@[msg]");
-            ILoggerData::StreamParam sp;
-            sp.streamType = ILoggerData::StreamType::NETWORK;
+            StreamParam sp;
+            sp.streamType = StreamType::NETWORK;
             sp.networkParam.addr = createStr("127.0.0.1");
             sp.networkParam.port = LOGGER_PORT;
             sp.networkParam.protocol = Protocol::UDP;

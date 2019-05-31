@@ -1,4 +1,6 @@
 #include "NetworkWriter.h"
+#include "CharUtilities.h"
+#include "StreamParams.h"
 #if defined(WINDOWS)
 #pragma comment (lib, "Ws2_32.lib")
 #elif defined(LINUX)
@@ -11,13 +13,9 @@ namespace Sys
 {
     namespace Logging
     {
-        NetworkWriter::NetworkWriter(const char* addr, unsigned short port, Protocol protocol)
+        NetworkWriter::NetworkWriter(const char* addr, unsigned short port, Protocol protocol):addr(createStr(addr)),port(port),protocol(protocol)
         {
 #undef strlen
-            register int l = strlen(addr);
-            this->addr = new char[l];
-            memcpy(this->addr, addr, sizeof(addr));
-            this->port = port;
 #if defined(WINDOWS)
             WSADATA wsdata;
             int error = WSAStartup(MAKEWORD(2, 2), &wsdata);
@@ -85,6 +83,10 @@ namespace Sys
                 bsend = send(s, p, l - sendB, 0);
                 sendB += bsend;
             } while (sendB < l&&bsend != 0);
+        }
+        bool NetworkWriter::compare(const StreamParam&par) const
+        {
+            return par.streamType == StreamType::NETWORK && !strcmp(addr, par.networkParam.addr) && port == par.networkParam.port && protocol == par.networkParam.protocol;
         }
         NetworkWriter::~NetworkWriter()
         {

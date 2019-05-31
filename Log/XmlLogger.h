@@ -20,7 +20,7 @@ namespace Sys
             String getLoggerName(int loggerNumber) const override;
             String getPaterens(int loggerNumber) const override;
             std::vector<ILoggerData::CustomLevel> getCustomLevel() const override;
-            ILoggerData::StreamParam getStreams(int loggerNumber) const override;
+            StreamParam getStreams(int loggerNumber) const override;
             size_t getMaxLogSize(int loggerNumber) const override;
             int getMaxWaitingLogs(int loggerNumber) const override;
             unsigned int getMaxLogTime(int loggerNumber) const override;

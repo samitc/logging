@@ -80,7 +80,6 @@ namespace Sys
             std::atomic<Configuration*> config;
             LoggerManager loggerManager;
             mutable std::atomic<uint64_t> logNumber;
-            UTF8* fileName;
         };
     }
 }
