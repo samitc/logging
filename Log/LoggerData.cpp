@@ -8,6 +8,17 @@ namespace Sys
         LoggerData::LoggerData() :param()
         {
         }
+        LoggerData::LoggerData(const ILoggerData* logger, int loggerNumber)
+        {
+            setStreamParam(logger->getStreams(loggerNumber));
+            setMaxLogSizeInKB(logger->getMaxLogSize(loggerNumber));
+            customLevels = logger->getCustomLevel();
+            setMaxLogTimeInSec(logger->getMaxLogTime(loggerNumber));
+            setLoggerName(logger->getLoggerName(loggerNumber));
+            setPatterens(logger->getPaterens(loggerNumber));
+            setLevel(logger->getLevel(loggerNumber));
+            maxWaitingLogs = logger->getMaxWaitingLogs(0);
+        }
         LoggerData::~LoggerData()
         {
         }
@@ -45,7 +56,7 @@ namespace Sys
         }
         int LoggerData::getMaxWaitingLogs(int loggerNumber) const
         {
-            return -1;
+            return maxWaitingLogs;
         }
         LogFilter LoggerData::getLogFilter(int loggerNumber) const
         {
@@ -59,35 +70,35 @@ namespace Sys
         {
             this->level = level;
         }
-        void LoggerData::setPatterens(const UTF8 * pat)
+        void LoggerData::setPatterens(const UTF8* pat)
         {
             this->pat = pat;
         }
-        void LoggerData::setPatterens(const String & pat)
+        void LoggerData::setPatterens(const String& pat)
         {
             this->pat = pat;
         }
-        void LoggerData::setPatterens(String && pat)
+        void LoggerData::setPatterens(String&& pat)
         {
             this->pat = std::move(pat);
         }
-        void LoggerData::setLoggerName(const UTF8 * name)
+        void LoggerData::setLoggerName(const UTF8* name)
         {
             logName = name;
         }
-        void LoggerData::setLoggerName(const String & name)
+        void LoggerData::setLoggerName(const String& name)
         {
             logName = name;
         }
-        void LoggerData::setLoggerName(String && name)
+        void LoggerData::setLoggerName(String&& name)
         {
             logName = std::move(name);
         }
-        void LoggerData::setStreamParam(const StreamParam & stream)
+        void LoggerData::setStreamParam(const StreamParam& stream)
         {
             this->param = stream;
         }
-        void LoggerData::setStreamParam(StreamParam && stream)
+        void LoggerData::setStreamParam(StreamParam&& stream)
         {
             param = std::move(stream);
         }
@@ -99,7 +110,7 @@ namespace Sys
         {
             maxLogTimeInSec = time;
         }
-        void LoggerData::addCustomLevel(const String &name, int level)
+        void LoggerData::addCustomLevel(const String& name, int level)
         {
             CustomLevel custom;
             custom.name = name;

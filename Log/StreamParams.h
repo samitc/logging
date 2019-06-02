@@ -1,7 +1,6 @@
 #ifndef _STREAMPARAMS_H_
 #define _STREAMPARAMS_H_
 #include <vector>
-#include <stdlib.h>
 #include "GlobalDefinitions.h"
 #include "LString.h"
 namespace Sys
@@ -37,6 +36,7 @@ namespace Sys
             {
                 FileParam fileParam;
                 NetworkParam networkParam;
+                ILoggerWriter* customWriter;
             };
             ILoggerWriter* getLoggerWriter() const;
         };

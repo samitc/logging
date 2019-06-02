@@ -10,6 +10,7 @@ namespace Sys
         {
         public:
             LoggerData();
+            LoggerData(const ILoggerData*, int loggerNumber);
             ~LoggerData() override;
             int getNumOfLoggers() const override;
             StreamParam getStreams(int loggerNumber) const override;
@@ -42,6 +43,7 @@ namespace Sys
             size_t maxLogSizeInKB;
             unsigned int maxLogTimeInSec;
             std::vector<CustomLevel> customLevels;
+            int maxWaitingLogs;
         };
     }
 }

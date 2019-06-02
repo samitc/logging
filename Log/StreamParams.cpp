@@ -7,7 +7,7 @@ namespace Sys
 {
     namespace Logging
     {
-        StreamParam::StreamParam(const StreamParam &copy) :streamType(copy.streamType)
+        StreamParam::StreamParam(const StreamParam& copy) :streamType(copy.streamType), customWriter(copy.customWriter)
         {
             switch (streamType)
             {
@@ -21,7 +21,7 @@ namespace Sys
                 break;
             }
         }
-        StreamParam & StreamParam::operator=(const StreamParam &eq)
+        StreamParam& StreamParam::operator=(const StreamParam& eq)
         {
             switch (streamType)
             {
@@ -33,6 +33,7 @@ namespace Sys
                 break;
             }
             streamType = eq.streamType;
+            customWriter = eq.customWriter;
             switch (streamType)
             {
             case StreamType::FILE:
@@ -57,7 +58,7 @@ namespace Sys
                 delete[] fileParam.fileName;
             }
         }
-        ILoggerWriter * StreamParam::getLoggerWriter() const
+        ILoggerWriter* StreamParam::getLoggerWriter() const
         {
             switch (streamType)
             {
@@ -71,7 +72,7 @@ namespace Sys
                 return new ConsoleWriter();
                 break;
             }
-            return nullptr;
+            return customWriter;
         }
     }
 }
