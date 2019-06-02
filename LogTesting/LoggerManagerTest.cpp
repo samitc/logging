@@ -47,7 +47,7 @@ namespace LogTesting
                 c1->clearRemoveWriter();
                 nw.setOneWriteSleep(std::chrono::milliseconds(100));
                 std::atomic<bool> startWrite(false);
-                nw.setCallbackBeforeWrite([&startWrite]() {
+                nw.setCallbackBeforeWrite([&startWrite](const char*) {
                     startWrite = true;
                 });
                 sendLog(c1, "1");

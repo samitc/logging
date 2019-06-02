@@ -8,12 +8,12 @@ NetworkWriterMock::~NetworkWriterMock()
 }
 void NetworkWriterMock::write(const char* text) const
 {
-    callbackBeforeWrite();
+    callbackBeforeWrite(text);
     std::this_thread::sleep_for(oneSleepDuration);
     oneSleepDuration = std::chrono::nanoseconds(0);
     NetworkWriter::write(text);
 }
-void NetworkWriterMock::setCallbackBeforeWrite(const std::function<void()>& f)
+void NetworkWriterMock::setCallbackBeforeWrite(const std::function<void(const char*)>& f)
 {
     callbackBeforeWrite = f;
 }

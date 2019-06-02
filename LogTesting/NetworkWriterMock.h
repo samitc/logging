@@ -11,10 +11,10 @@ public:
     ~NetworkWriterMock();
     void write(const char* text) const override;
     template <typename Rep,typename Period> void setOneWriteSleep(const std::chrono::duration<Rep,Period> &duration);
-    void setCallbackBeforeWrite(const std::function<void()> &f);
+    void setCallbackBeforeWrite(const std::function<void(const char*)> &f);
 private:
     mutable std::chrono::nanoseconds oneSleepDuration;
-    std::function<void()> callbackBeforeWrite;
+    std::function<void(const char*)> callbackBeforeWrite;
 };
 #endif
 template<typename Rep, typename Period>
