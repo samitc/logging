@@ -1,6 +1,6 @@
 #include "NetworkWriterMock.h"
 #include <thread>
-NetworkWriterMock::NetworkWriterMock(const char* addr, unsigned short port, Protocol protocol) :NetworkWriter(addr, port, protocol)
+NetworkWriterMock::NetworkWriterMock(const char* addr, unsigned short port, Protocol protocol) :NetworkWriter(addr, port, protocol), oneSleepDuration(0), callbackBeforeWrite()
 {
 }
 NetworkWriterMock::~NetworkWriterMock()

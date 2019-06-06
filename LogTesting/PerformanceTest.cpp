@@ -1,4 +1,5 @@
 #include <chrono>
+#include <stdlib.h>
 #include "../Log/Logger.h"
 #include "../Log/XmlLogger.h"
 #include "../Log/LoggerData.h"
