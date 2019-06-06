@@ -92,13 +92,17 @@ TEST(PerformanceTest, TEST_WRITE_DELAY_METHOD_NAME) {
         for (size_t i = 0; i < PERFORMANCE_TEST_NUM_OF_MSG / 4; i++)
         {
             startTimes[i * 4 + 0] = ChronoClock::now();
-            log.info(itoa(i * 4 + 0, indexBuf, 10));
+            sprintf(indexBuf, "%d", i * 4 + 0);
+            log.info(indexBuf);
             startTimes[i * 4 + 1] = ChronoClock::now();
-            log.log(6, itoa(i * 4 + 1, indexBuf, 10));
+            sprintf(indexBuf, "%d", i * 4 + 1);
+            log.log(6, indexBuf);
             startTimes[i * 4 + 2] = ChronoClock::now();
-            log.debug(itoa(i * 4 + 2, indexBuf, 10));
+            sprintf(indexBuf, "%d", i * 4 + 2);
+            log.debug(indexBuf);
             startTimes[i * 4 + 3] = ChronoClock::now();
-            log.log("info", itoa(i * 4 + 3, indexBuf, 10));
+            sprintf(indexBuf, "%d", i * 4 + 3);
+            log.log("info", indexBuf);
         }
     }
     if (!isDone)

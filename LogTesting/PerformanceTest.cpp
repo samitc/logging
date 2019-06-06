@@ -1,5 +1,4 @@
 #include <chrono>
-#include <stdlib.h>
 #include "../Log/Logger.h"
 #include "../Log/XmlLogger.h"
 #include "../Log/LoggerData.h"
@@ -31,9 +30,11 @@ namespace LogTesting {
 #include "PerformanceTest.h"
 #undef TEST_LOAD_METHOD_NAME
 #undef TEST_DELAY_METHOD_NAME
+#undef TEST_WRITE_DELAY_METHOD_NAME
 #undef LOG_CONCURRENCY_LEVEL
 #undef LOAD_THRESHOLD
 #undef DELAY_THRESHOLD
+#undef WRITE_DELAY_THRESHOLD
 #define TEST_LOAD_METHOD_NAME    LogLoadMinConcurrencyTest
 #define TEST_DELAY_METHOD_NAME    LogDelayMinConcurrencyTest
 #define TEST_WRITE_DELAY_METHOD_NAME LogWriteDelayMinConcurrencyTest
@@ -50,9 +51,11 @@ namespace LogTesting {
 #include "PerformanceTest.h"
 #undef TEST_LOAD_METHOD_NAME
 #undef TEST_DELAY_METHOD_NAME
+#undef TEST_WRITE_DELAY_METHOD_NAME
 #undef LOG_CONCURRENCY_LEVEL
 #undef LOAD_THRESHOLD
 #undef DELAY_THRESHOLD
+#undef WRITE_DELAY_THRESHOLD
 #define TEST_LOAD_METHOD_NAME    LogLoadNoneConcurrencyTest
 #define TEST_DELAY_METHOD_NAME    LogDelayNoneConcurrencyTest
 #define TEST_WRITE_DELAY_METHOD_NAME LogWriteDelayNoneConcurrencyTest
@@ -69,7 +72,9 @@ namespace LogTesting {
 #include "PerformanceTest.h"
 #undef TEST_LOAD_METHOD_NAME
 #undef TEST_DELAY_METHOD_NAME
+#undef TEST_WRITE_DELAY_METHOD_NAME
 #undef LOG_CONCURRENCY_LEVEL
 #undef LOAD_THRESHOLD
 #undef DELAY_THRESHOLD
+#undef WRITE_DELAY_THRESHOLD
 }
