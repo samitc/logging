@@ -55,11 +55,11 @@ namespace Sys
             int digitCount;
             int l = 0;
             int patternL = strlen(pattern);
-            UTF8 * temp = (UTF8*)alloca(patternL * (std::max(patternL, MAX_COUNT) * sizeof(UTF8) + 1));
+            UTF8 * temp = (UTF8*)alloca(patternL * MAX_COUNT * sizeof(UTF8) + 1);
             int curIndex = 0;
             while (*pattern != 0)
             {
-                UTF8* curTempLocation = temp + curIndex * (patternL * sizeof(UTF8) + 1);
+                UTF8* curTempLocation = temp + curIndex * (MAX_COUNT * sizeof(UTF8) + 1);
                 switch (*pattern)
                 {
                     CREATE_PATTERN_CASE('d',time.getDay());
@@ -83,7 +83,7 @@ namespace Sys
             ret[0] = 0;
             for (int i = 0; i < curIndex; i++)
             {
-                strcat(ret, temp + (i * (patternL * sizeof(UTF8) + 1)));
+                strcat(ret, temp + (i * (MAX_COUNT * sizeof(UTF8) + 1)));
             }
             return ret;
         }

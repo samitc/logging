@@ -68,4 +68,14 @@ namespace LogTesting
         EXPECT_STREQ(expected.c_str(), data);
         delete[]data;
     }
+    TEST(DateTimeTest, testPatternOverflow)
+    {
+        DateTimeMock dateTime;
+        UTF8 *data=dateTime.getData("yMd");
+        auto expected = std::to_string(getLocalTime(dateTime.getTime())->tm_year + 1900) +
+                        std::to_string(getLocalTime(dateTime.getTime())->tm_mon + 1) +
+                        std::to_string(getLocalTime(dateTime.getTime())->tm_mday);
+        EXPECT_STREQ(expected.c_str(), data);
+        delete[]data;
+    }
 }
