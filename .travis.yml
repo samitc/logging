@@ -13,18 +13,6 @@ matrix:
         apt:
           sources:
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-6.0
-          packages:
-            - clang-6.0 gcc-multilib g++-multilib
-      env:
-         - MATRIX_EVAL="CC=clang-6.0 && CXX=clang++-6.0"
-      compiler:
-         - clang
-    - os: linux
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
             - llvm-toolchain-trusty-7
           packages:
             - clang-7 gcc-multilib g++-multilib
